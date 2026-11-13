@@ -1,0 +1,1 @@
+-keep class com.explorefaith.pixelkey.voiceinput.shared.ggml.WhisperGGML
