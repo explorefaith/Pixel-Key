@@ -20,7 +20,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Predefined subtypes (language:layout[:extraValue]) -->
     <string-array name="predefined_subtypes" translatable="false">
-        <item>de:qwerty:AsciiCapable</item>
-        <item>fr:qwertz:AsciiCapable</item>
+        <item>en_US:qwerty:AsciiCapable</item>
+        <item>bn_BD:bengali_avro:AsciiCapable</item>
+        <item>hi:hindi:AsciiCapable</item>
+        <item>es:spanish:AsciiCapable</item>
+        <item>zh_CN:pinyin:AsciiCapable</item>
+        <item>ar:arabic:AsciiCapable</item>
     </string-array>
 </resources>

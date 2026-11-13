@@ -38,6 +38,7 @@ android {
     testNamespace 'com.explorefaith.pixelkey.latin.tests'
 
     compileSdk 34
+    ndkVersion "25.2.9519653"
 
     // Required if using classes in android.test.runner
     useLibrary 'android.test.runner'

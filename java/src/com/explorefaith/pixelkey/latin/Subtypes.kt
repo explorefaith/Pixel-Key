@@ -127,9 +127,7 @@ object Subtypes {
         if(!context.isDirectBootUnlocked) return
 
         val defaultBengali = listOf(
-            "bn_BD:KeyboardLayoutSet=bengali_avro:",
-            "bn_BD:KeyboardLayoutSet=bengali_jatiyo:",
-            "bn_BD:KeyboardLayoutSet=bengali_probhat:"
+            "bn_BD:KeyboardLayoutSet=bengali_avro:"
         )
 
         val currentSubtypes = context.getSettingBlocking(SubtypesSetting)
@@ -227,12 +225,12 @@ object Subtypes {
         }
     }
 
-    const val MAX_ACTIVE_KEYBOARDS = 3
+    const val MAX_ACTIVE_KEYBOARDS = 6
 
     fun addLanguage(context: Context, language: Locale, layout: String): Boolean {
         val currentSetting = context.getSettingBlocking(SubtypesSetting)
         if (currentSetting.size >= MAX_ACTIVE_KEYBOARDS) {
-            Toast.makeText(context, "Maximum 3 keyboards can be selected at a time", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Maximum ${MAX_ACTIVE_KEYBOARDS} keyboards can be selected at a time", Toast.LENGTH_SHORT).show()
             return false
         }
         val value = subtypeToString(
@@ -294,9 +292,7 @@ object Subtypes {
             layouts.add("en_US:KeyboardLayoutSet=qwerty:")
         }
         layouts.addAll(listOf(
-            "bn_BD:KeyboardLayoutSet=bengali_avro:",
-            "bn_BD:KeyboardLayoutSet=bengali_jatiyo:",
-            "bn_BD:KeyboardLayoutSet=bengali_probhat:"
+            "bn_BD:KeyboardLayoutSet=bengali_avro:"
         ))
 
         if(locales.size() == 0) return layouts
@@ -358,7 +354,7 @@ fun LanguageSwitcherDialog(
         Subtypes.cleanupDuplicateSubtypes(context)
     }
     val subtypeSet = if(inspection) {
-        setOf("en_US:", "pt_PT:", "lt:", "fr:KeyboardLayoutSet=bepo:")
+        setOf("en_US:KeyboardLayoutSet=qwerty:", "bn_BD:KeyboardLayoutSet=bengali_avro:", "es:KeyboardLayoutSet=spanish:")
     } else {
         useDataStoreValue(SubtypesSetting)
     }

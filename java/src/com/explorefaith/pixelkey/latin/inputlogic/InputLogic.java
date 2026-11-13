@@ -48,6 +48,7 @@ import com.explorefaith.pixelkey.latin.SuggestedWords;
 import com.explorefaith.pixelkey.latin.SuggestedWords.SuggestedWordInfo;
 import com.explorefaith.pixelkey.latin.WordComposer;
 import com.explorefaith.pixelkey.latin.bengali.RidmikParser;
+import com.explorefaith.pixelkey.latin.chinese.PinyinEngine;
 import com.explorefaith.pixelkey.latin.common.Constants;
 import com.explorefaith.pixelkey.latin.common.InputPointers;
 import com.explorefaith.pixelkey.latin.common.StringUtils;
@@ -117,6 +118,7 @@ public final class InputLogic {
 
     private boolean isLogicSuppressedByExternalLogic = false;
     private final RidmikParser mRidmikParser = new RidmikParser();
+    private final PinyinEngine mPinyinEngine = new PinyinEngine();
 
     private Boolean mAvroActiveOverrideForTest = null;
 
@@ -143,6 +145,35 @@ public final class InputLogic {
         final String lang = subtype.getLocale() != null ? subtype.getLocale().getLanguage() : "";
         final String layoutName = subtype.getKeyboardLayoutSetName();
         return "bn".equals(lang) && "bengali_avro".equals(layoutName);
+    }
+
+    /** True when the Chinese (Pinyin) layout is active. */
+    public boolean isPinyinActive() {
+        if (mLatinIMELegacy != null && mLatinIMELegacy.mKeyboardSwitcher != null) {
+            final Keyboard keyboard = mLatinIMELegacy.mKeyboardSwitcher.getKeyboard();
+            if (keyboard != null && keyboard.mId != null && keyboard.mId.mSubtype != null) {
+                final String layout = keyboard.mId.mSubtype.getKeyboardLayoutSetName();
+                final String lang = keyboard.mId.mSubtype.getLocale() != null ? keyboard.mId.mSubtype.getLocale().getLanguage() : "";
+                return "zh".equals(lang) && "pinyin".equals(layout);
+            }
+        }
+        final RichInputMethodManager imm = RichInputMethodManager.getInstance();
+        if (imm == null) return false;
+        final RichInputMethodSubtype subtype = imm.getCurrentSubtype();
+        if (subtype == null) return false;
+        final String lang = subtype.getLocale() != null ? subtype.getLocale().getLanguage() : "";
+        final String layoutName = subtype.getKeyboardLayoutSetName();
+        return "zh".equals(lang) && "pinyin".equals(layoutName);
+    }
+
+    /**
+     * Converts the raw typed word through the active phonetic engine (Bangla Avro or
+     * Chinese Pinyin). Returns the raw word when no phonetic layout is active.
+     */
+    private String phoneticConvert(final String raw) {
+        if (isAvroActive()) return mRidmikParser.toBangla(raw);
+        if (isPinyinActive()) return mPinyinEngine.toHanzi(raw);
+        return raw;
     }
 
     public static boolean isAvroWordCodePoint(final int codePoint) {
@@ -418,9 +449,9 @@ public final class InputLogic {
      */
     public void finishInput() {
         if (mWordComposer.isComposingWord()) {
-            if (isAvroActive()) {
+            if (isAvroActive() || isPinyinActive()) {
                 final String typedWord = mWordComposer.getTypedWord();
-                final String bangla = mRidmikParser.toBangla(typedWord);
+                final String bangla = phoneticConvert(typedWord);
                 mConnection.commitText(bangla, 1);
             } else {
                 mConnection.finishComposingText();
@@ -837,9 +868,9 @@ public final class InputLogic {
         if (mIsAutoCorrectionIndicatorOn != newAutoCorrectionIndicator
                 && mWordComposer.isComposingWord()) {
             mIsAutoCorrectionIndicatorOn = newAutoCorrectionIndicator;
-            if (isAvroActive()) {
+            if (isAvroActive() || isPinyinActive()) {
                 final String raw = mWordComposer.getTypedWord();
-                final String bangla = mRidmikParser.toBangla(raw);
+                final String bangla = phoneticConvert(raw);
                 setComposingTextInternal(bangla, 1);
             } else {
                 final CharSequence textWithUnderline =
@@ -869,7 +900,7 @@ public final class InputLogic {
         }
         if (mWordComposer.isComposingWord()) {
             final String raw = mWordComposer.getTypedWord();
-            final String text = isAvroActive() ? mRidmikParser.toBangla(raw) : raw;
+            final String text = (isAvroActive() || isPinyinActive()) ? phoneticConvert(raw) : raw;
             setComposingTextInternal(text, 1);
             inputTransaction.setDidAffectContents();
             inputTransaction.setRequiresUpdateSuggestions();
@@ -1087,7 +1118,7 @@ public final class InputLogic {
         // we need to reset the composing state and switch isComposingWord. The order of the
         // tests is important for good performance.
         // We only start composing if we're not already composing.
-        if (isAvroActive()) {
+        if (isAvroActive() || isPinyinActive()) {
             if (isAvroWordCodePoint(codePoint)) {
                 if (!isComposingWord) {
                     isComposingWord = true;
@@ -1098,7 +1129,7 @@ public final class InputLogic {
                     mWordComposer.setCapitalizedModeAtStartComposingTime(inputTransaction.mShiftState);
                 }
                 final String rawTyped = mWordComposer.getTypedWord();
-                final String displayText = mRidmikParser.toBangla(rawTyped);
+                final String displayText = phoneticConvert(rawTyped);
                 setComposingTextInternal(displayText, 1);
                 inputTransaction.setRequiresUpdateSuggestions();
                 return;
@@ -1147,8 +1178,8 @@ public final class InputLogic {
                 mWordComposer.setCapitalizedModeAtStartComposingTime(inputTransaction.mShiftState);
             }
             final String rawTyped = mWordComposer.getTypedWord();
-            final String displayText = isAvroActive() ? mRidmikParser.toBangla(rawTyped) : rawTyped;
-            setComposingTextInternal(isAvroActive() ? displayText : getTextWithUnderline(displayText), 1);
+            final String displayText = phoneticConvert(rawTyped);
+            setComposingTextInternal((isAvroActive() || isPinyinActive()) ? displayText : getTextWithUnderline(displayText), 1);
         } else {
             final boolean swapWeakSpace = tryStripSpaceAndReturnWhetherShouldSwapInstead(event,
                     inputTransaction);
@@ -1187,9 +1218,9 @@ public final class InputLogic {
         }
         // isComposingWord() may have changed since we stored wasComposing
         if (mWordComposer.isComposingWord()) {
-            if (isAvroActive()) {
+            if (isAvroActive() || isPinyinActive()) {
                 final String typedWord = mWordComposer.getTypedWord();
-                final String bangla = mRidmikParser.toBangla(typedWord);
+                final String bangla = phoneticConvert(typedWord);
                 commitChosenWord(settingsValues, bangla,
                         LastComposedWord.COMMIT_TYPE_USER_TYPED_WORD,
                         LastComposedWord.NOT_A_SEPARATOR, -1);
@@ -1339,8 +1370,8 @@ public final class InputLogic {
             }
             if (mWordComposer.isComposingWord()) {
                 final String rawTyped = mWordComposer.getTypedWord();
-                final String displayText = isAvroActive() ? mRidmikParser.toBangla(rawTyped) : rawTyped;
-                setComposingTextInternal(isAvroActive() ? displayText : getTextWithUnderline(displayText), 1);
+                final String displayText = (isAvroActive() || isPinyinActive()) ? phoneticConvert(rawTyped) : rawTyped;
+                setComposingTextInternal((isAvroActive() || isPinyinActive()) ? displayText : getTextWithUnderline(displayText), 1);
             } else {
                 mConnection.commitText("", 1);
             }
@@ -1354,7 +1385,7 @@ public final class InputLogic {
                 inputTransaction.setRequiresUpdateSuggestions();
                 return;
             }
-            if (isAvroActive()) {
+            if (isAvroActive() || isPinyinActive()) {
                 mConnection.deleteTextBeforeCursor(1);
                 mLastComposedWord.deactivate();
                 inputTransaction.setRequiresUpdateSuggestions();
@@ -2156,7 +2187,7 @@ public final class InputLogic {
      * @return a caps mode from TextUtils.CAP_MODE_* or Constants.TextUtils.CAP_MODE_OFF.
      */
     public int getCurrentAutoCapsState(final SettingsValues settingsValues) {
-        if (isAvroActive()) {
+        if (isAvroActive() || isPinyinActive()) {
             return Constants.TextUtils.CAP_MODE_OFF;
         }
         if (!settingsValues.mAutoCap) return Constants.TextUtils.CAP_MODE_OFF;
@@ -2475,7 +2506,7 @@ public final class InputLogic {
     public void commitTyped(final SettingsValues settingsValues, final String separatorString) {
         if (!mWordComposer.isComposingWord()) return;
         final String typedWord = mWordComposer.getTypedWord();
-        final String wordToCommit = isAvroActive() ? mRidmikParser.toBangla(typedWord) : typedWord;
+        final String wordToCommit = (isAvroActive() || isPinyinActive()) ? phoneticConvert(typedWord) : typedWord;
         if (wordToCommit.length() > 0) {
             final boolean isBatchMode = mWordComposer.isBatchMode();
             commitChosenWord(settingsValues, wordToCommit,
@@ -2502,9 +2533,9 @@ public final class InputLogic {
      */
     private void commitCurrentAutoCorrection(final SettingsValues settingsValues,
             final String separator, final LatinIMELegacy.UIHandler handler) {
-        if (isAvroActive()) {
+        if (isAvroActive() || isPinyinActive()) {
             final String typedWord = mWordComposer.getTypedWord();
-            final String stringToCommit = mRidmikParser.toBangla(typedWord);
+            final String stringToCommit = phoneticConvert(typedWord);
             if (!TextUtils.isEmpty(stringToCommit)) {
                 commitChosenWord(settingsValues, stringToCommit,
                         LastComposedWord.COMMIT_TYPE_DECIDED_WORD, separator, 0);
@@ -2668,6 +2699,23 @@ public final class InputLogic {
                 }
             }
             final SuggestedWordInfo recommendedInfo = list.size() > 1 ? list.get(1) : list.get(0);
+            final boolean willAutoCorrect = list.size() > 1;
+            final SuggestedWords words = new SuggestedWords(list, null, list.get(0), true, willAutoCorrect, false, inputStyle, sequenceNumber);
+            callback.onGetSuggestedWords(words);
+            return;
+        }
+        if (isPinyinActive() && mWordComposer.isComposingWord()) {
+            final String raw = mWordComposer.getTypedWord();
+            final java.util.List<String> candidates = mPinyinEngine.getCandidates(raw);
+            final ArrayList<SuggestedWordInfo> list = new ArrayList<>();
+            list.add(new SuggestedWordInfo(raw, "", 1, SuggestedWordInfo.KIND_TYPED, null, 0, 0));
+            int score = SuggestedWordInfo.MAX_SCORE;
+            for (final String candidate : candidates) {
+                if (!candidate.equals(raw)) {
+                    list.add(new SuggestedWordInfo(candidate, "", score, SuggestedWordInfo.KIND_CORRECTION, null, 0, 0));
+                    score--;
+                }
+            }
             final boolean willAutoCorrect = list.size() > 1;
             final SuggestedWords words = new SuggestedWords(list, null, list.get(0), true, willAutoCorrect, false, inputStyle, sequenceNumber);
             callback.onGetSuggestedWords(words);
