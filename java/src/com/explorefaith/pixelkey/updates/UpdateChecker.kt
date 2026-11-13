@@ -137,19 +137,19 @@ object UpdateChecker {
                             }
                         }
                     }
-                    if (hasKbdApk || relTitle.contains("pixel-key") || relTitle.contains("orbit board") ||
+                    if (hasKbdApk || relTitle.contains("pixel-key") ||
                         relTitle.contains("pixelkey") || tag.contains("pixel-key") || tag.contains("pixelkey")) {
                         matchedObj = rel
                         break
                     }
                 }
-                // Never fall back to index 0 (which may be Orbit Music)
+                // Never fall back to index 0 (which may be an unrelated release)
                 matchedObj ?: return null
             } else {
                 val singleObj = JSONObject(responseBody)
                 val relTitle = singleObj.optString("name", "").lowercase()
                 val tag = singleObj.optString("tag_name", "").lowercase()
-                if (relTitle.contains("pixel-key") || relTitle.contains("orbit board") ||
+                if (relTitle.contains("pixel-key") ||
                     relTitle.contains("pixelkey") || tag.contains("pixel-key") || tag.contains("pixelkey")) {
                     singleObj
                 } else {

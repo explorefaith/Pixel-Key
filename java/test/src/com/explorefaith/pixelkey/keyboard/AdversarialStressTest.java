@@ -71,7 +71,7 @@ public class AdversarialStressTest {
         // Intrinsic width equals total padding -> maxWidth = 0
         assertNull(simulateKeyPreviewScaleX(40, 20, 20, 30.0f));
 
-        // Intrinsic width is -1 (ShapeDrawable default in Orbit themes) -> maxWidth = -1
+        // Intrinsic width is -1 (ShapeDrawable default in Pixel themes) -> maxWidth = -1
         assertNull(simulateKeyPreviewScaleX(-1, 0, 0, 50.0f));
 
         // Intrinsic width is -1 with padding -> maxWidth = -21

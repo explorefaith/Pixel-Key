@@ -16,7 +16,7 @@
 
 #define LOG_TAG "LatinIME: jni: Session"
 
-#include "org_futo_inputmethod_latin_DicTraverseSession.h"
+#include "com_explorefaith_pixelkey_latin_DicTraverseSession.h"
 
 #include "defines.h"
 #include "dictionary/property/ngram_context.h"
@@ -74,7 +74,7 @@ static const JNINativeMethod sMethods[] = {
 };
 
 int register_DicTraverseSession(JNIEnv *env) {
-    const char *const kClassPathName = "org/futo/inputmethod/latin/DicTraverseSession";
+    const char *const kClassPathName = "com/explorefaith/pixelkey/latin/DicTraverseSession";
     return registerNativeMethods(env, kClassPathName, sMethods, NELEMS(sMethods));
 }
 } // namespace latinime

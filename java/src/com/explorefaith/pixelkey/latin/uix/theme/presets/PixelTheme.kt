@@ -18,9 +18,9 @@ val PixelMatteBlue = Color(0xFF2A5288)
 val PixelMatteRed = Color(0xFFC23636)
 val PixelMatteWhite = Color(0xFFEAE6E1)
 val PixelMatteDark = Color(0xFF1C1D20)
-val OrbitBlack = Color(0xFF000000)
+val PixelBlack = Color(0xFF000000)
 
-private val orbitColorScheme = darkColorScheme(
+private val pixelColorScheme = darkColorScheme(
     primary = PixelMatteRed,
     onPrimary = Color(0xFFFFFFFF),
     primaryContainer = PixelMatteDark,
@@ -31,9 +31,9 @@ private val orbitColorScheme = darkColorScheme(
     onSecondaryContainer = Color(0xFFFFFFFF),
     tertiary = PixelMatteYellow,
     onTertiary = Color(0xFF121212),
-    background = OrbitBlack,
+    background = PixelBlack,
     onBackground = Color(0xFFFFFFFF),
-    surface = OrbitBlack,
+    surface = PixelBlack,
     onSurface = Color(0xFFFFFFFF),
     surfaceVariant = PixelMatteDark,
     onSurfaceVariant = Color(0xFFFFFFFF),
@@ -47,7 +47,7 @@ val PixelTheme = ThemeOption(
     name = R.string.theme_pixel,
     available = { true }
 ) {
-    orbitColorScheme
+    pixelColorScheme
 }
 
 @Composable

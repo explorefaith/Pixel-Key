@@ -4,7 +4,7 @@
 #include <bits/sysconf.h>
 #include "ggml/whisper.h"
 #include "defines.h"
-#include "org_futo_voiceinput_WhisperGGML.h"
+#include "com_explorefaith_pixelkey_voiceinput_WhisperGGML.h"
 #include "jni_common.h"
 #include "jni_utils.h"
 
@@ -254,7 +254,7 @@ static const JNINativeMethod sMethods[] = {
 
 namespace voiceinput {
     int register_WhisperGGML(JNIEnv *env) {
-        const char *const kClassPathName = "org/futo/voiceinput/shared/ggml/WhisperGGML";
+        const char *const kClassPathName = "com/explorefaith/pixelkey/voiceinput/shared/ggml/WhisperGGML";
         return latinime::registerNativeMethods(env, kClassPathName, sMethods, NELEMS(sMethods));
     }
 }

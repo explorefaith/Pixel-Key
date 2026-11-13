@@ -16,7 +16,7 @@
 
 #define LOG_TAG "LatinIME: jni: BinaryDictionary"
 
-#include "org_futo_inputmethod_latin_BinaryDictionary.h"
+#include "com_explorefaith_pixelkey_latin_BinaryDictionary.h"
 
 #include <cstring> // for memset()
 #include <vector>
@@ -717,7 +717,7 @@ static const JNINativeMethod sMethods[] = {
     {
         const_cast<char *>("updateEntriesForInputEventsNative"),
         const_cast<char *>(
-                "(J[Lorg/futo/inputmethod/latin/utils/WordInputEventForPersonalization;I)I"),
+                "(J[Lcom/explorefaith/pixelkey/latin/utils/WordInputEventForPersonalization;I)I"),
         reinterpret_cast<void *>(latinime_BinaryDictionary_updateEntriesForInputEvents)
     },
     {
@@ -738,7 +738,7 @@ static const JNINativeMethod sMethods[] = {
 };
 
 int register_BinaryDictionary(JNIEnv *env) {
-    const char *const kClassPathName = "org/futo/inputmethod/latin/BinaryDictionary";
+    const char *const kClassPathName = "com/explorefaith/pixelkey/latin/BinaryDictionary";
     return registerNativeMethods(env, kClassPathName, sMethods, NELEMS(sMethods));
 }
 } // namespace latinime

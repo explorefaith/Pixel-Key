@@ -1,6 +1,6 @@
 #include <jni.h>
 #include <string>
-#include "org_futo_inputmethod_latin_xlm_ModelInfoLoader.h"
+#include "com_explorefaith_pixelkey_latin_xlm_ModelInfoLoader.h"
 #include "defines.h"
 #include "jni_common.h"
 #include "ggml/finetune.h"
@@ -19,7 +19,7 @@ namespace latinime {
             return NULL;
         }
 
-        jclass modelInfoClass = env->FindClass("org/futo/inputmethod/latin/xlm/ModelInfo");
+        jclass modelInfoClass = env->FindClass("com/explorefaith/pixelkey/latin/xlm/ModelInfo");
         jmethodID constructor = env->GetMethodID(modelInfoClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/lang/String;ILjava/lang/String;)V");
 
         // Create example data
@@ -82,13 +82,13 @@ namespace latinime {
     static const JNINativeMethod sMethods[] = {
             {
                     const_cast<char *>("loadNative"),
-                    const_cast<char *>("(Ljava/lang/String;)Lorg/futo/inputmethod/latin/xlm/ModelInfo;"),
+                    const_cast<char *>("(Ljava/lang/String;)Lcom/explorefaith/pixelkey/latin/xlm/ModelInfo;"),
                     reinterpret_cast<void *>(metadata_open)
             },
     };
 
     int register_ModelInfoLoader(JNIEnv *env) {
-        const char *const kClassPathName = "org/futo/inputmethod/latin/xlm/ModelInfoLoader";
+        const char *const kClassPathName = "com/explorefaith/pixelkey/latin/xlm/ModelInfoLoader";
         return registerNativeMethods(env, kClassPathName, sMethods, NELEMS(sMethods));
     }
 

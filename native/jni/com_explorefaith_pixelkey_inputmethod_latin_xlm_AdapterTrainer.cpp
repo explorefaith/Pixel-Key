@@ -7,7 +7,7 @@
 #include <sstream>
 #include <chrono>
 #include <iomanip>
-#include "org_futo_inputmethod_latin_xlm_AdapterTrainer.h"
+#include "com_explorefaith_pixelkey_latin_xlm_AdapterTrainer.h"
 #include "defines.h"
 #include "jni_common.h"
 #include "ggml/finetune.h"
@@ -256,7 +256,7 @@ namespace latinime {
     };
 
     int register_AdapterTrainer(JNIEnv *env) {
-        const char *const kClassPathName = "org/futo/inputmethod/latin/xlm/AdapterTrainer";
+        const char *const kClassPathName = "com/explorefaith/pixelkey/latin/xlm/AdapterTrainer";
         return registerNativeMethods(env, kClassPathName, sMethods, NELEMS(sMethods));
     }
 }

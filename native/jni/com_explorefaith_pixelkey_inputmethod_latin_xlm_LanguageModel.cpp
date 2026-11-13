@@ -1,6 +1,6 @@
 #define LOG_TAG "LatinIME: jni: LanguageModel"
 
-#include "org_futo_inputmethod_latin_xlm_LanguageModel.h"
+#include "com_explorefaith_pixelkey_latin_xlm_LanguageModel.h"
 
 #include <cstring> // for memset()
 #include <vector>
@@ -1239,7 +1239,7 @@ namespace latinime {
         llama_backend_init(true /* numa??? */);
         llama_log_set(llama_log_callback, nullptr);
 
-        const char *const kClassPathName = "org/futo/inputmethod/latin/xlm/LanguageModel";
+        const char *const kClassPathName = "com/explorefaith/pixelkey/latin/xlm/LanguageModel";
         return registerNativeMethods(env, kClassPathName, sMethods, NELEMS(sMethods));
     }
 } // namespace latinime
