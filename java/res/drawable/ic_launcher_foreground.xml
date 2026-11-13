@@ -3,23 +3,21 @@
     android:height="108dp"
     android:viewportWidth="512"
     android:viewportHeight="512">
-  <group android:scaleX="0.6675"
-      android:scaleY="0.6675"
-      android:translateX="85.12"
-      android:translateY="29.742222">
+  <group
+      android:scaleX="0.5"
+      android:scaleY="0.5"
+      android:translateX="128"
+      android:translateY="128">
+    <!-- Key tile -->
     <path
-        android:pathData="M127.08,338.96L384.92,338.96Z"
-        android:strokeLineJoin="round"
-        android:strokeWidth="150"
-        android:fillColor="#00000000"
-        android:strokeColor="#1b1d1f"
-        android:strokeLineCap="round"/>
-    <path
-        android:pathData="M385.91,338m-49.44,0a49.44,49.44 0,1 1,98.88 0a49.44,49.44 0,1 1,-98.88 0"
-        android:strokeLineJoin="round"
-        android:strokeWidth="184.024"
-        android:fillColor="#d71921"
-        android:strokeColor="#00000000"
-        android:strokeLineCap="round"/>
+        android:pathData="M64,96 L448,96 A32,32 0 0 1 480,128 L480,416 A32,32 0 0 1 448,448 L64,448 A32,32 0 0 1 32,416 L32,128 A32,32 0 0 1 64,96 Z"
+        android:fillColor="#FFFFFF"/>
+    <!-- Pixel square motif -->
+    <path android:pathData="M176,192 L240,192 A8,8 0 0 1 248,200 L248,248 A8,8 0 0 1 240,256 L176,256 A8,8 0 0 1 168,248 L168,200 A8,8 0 0 1 176,192 Z" android:fillColor="#4F46E5"/>
+    <path android:pathData="M288,192 L336,192 A8,8 0 0 1 344,200 L344,248 A8,8 0 0 1 336,256 L288,256 A8,8 0 0 1 280,248 L280,200 A8,8 0 0 1 288,192 Z" android:fillColor="#F59E0B"/>
+    <path android:pathData="M168,288 L240,288 A8,8 0 0 1 248,296 L248,344 A8,8 0 0 1 240,352 L168,352 A8,8 0 0 1 160,344 L160,296 A8,8 0 0 1 168,288 Z" android:fillColor="#C7C9D4"/>
+    <path android:pathData="M280,288 L336,288 A8,8 0 0 1 344,296 L344,344 A8,8 0 0 1 336,352 L280,352 A8,8 0 0 1 272,344 L272,296 A8,8 0 0 1 280,288 Z" android:fillColor="#4F46E5"/>
+    <path android:pathData="M136,376 L208,376 A8,8 0 0 1 216,384 L216,408 A8,8 0 0 1 208,416 L136,416 A8,8 0 0 1 128,408 L128,384 A8,8 0 0 1 136,376 Z" android:fillColor="#F59E0B"/>
+    <path android:pathData="M240,376 L312,376 A8,8 0 0 1 320,384 L320,408 A8,8 0 0 1 312,416 L240,416 A8,8 0 0 1 232,408 L232,384 A8,8 0 0 1 240,376 Z" android:fillColor="#C7C9D4"/>
   </group>
 </vector>

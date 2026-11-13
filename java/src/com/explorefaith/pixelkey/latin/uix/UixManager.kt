@@ -84,6 +84,9 @@ import com.explorefaith.pixelkey.latin.uix.settings.DataStoreCacheProvider
 import com.explorefaith.pixelkey.latin.uix.settings.SettingsActivity
 import com.explorefaith.pixelkey.latin.uix.settings.pages.ActionBarDisplayedSetting
 import com.explorefaith.pixelkey.latin.uix.settings.useDataStore
+import com.explorefaith.pixelkey.latin.uix.ONE_HANDED_MODE
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import com.explorefaith.pixelkey.latin.uix.theme.ThemeOption
 import com.explorefaith.pixelkey.latin.uix.theme.Typography
 import com.explorefaith.pixelkey.latin.uix.theme.UixThemeAuto

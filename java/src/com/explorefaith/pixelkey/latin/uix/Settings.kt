@@ -255,3 +255,8 @@ val SHOW_EMOJI_SUGGESTIONS = SettingsKey(
     key = booleanPreferencesKey("suggestEmojis"),
     default = true
 )
+
+val ONE_HANDED_MODE = SettingsKey(
+    key = stringPreferencesKey("oneHandedMode"),
+    default = "off"
+)

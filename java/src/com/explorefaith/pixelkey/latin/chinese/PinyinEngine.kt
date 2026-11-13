@@ -89,7 +89,7 @@ class PinyinEngine {
             "shanchu" to "删除", "fuzhi" to "复制", "zhantie" to "粘贴", "guanbi" to "关闭",
             "dakai" to "打开", "shezhi" to "设置", "jianpan" to "键盘", "shurufa" to "输入法",
             "pinyin" to "拼音", "hanzi" to "汉字", "meishu" to "美术", "laopo" to "老婆",
-            "laopo" to "老婆", "laogong" to "老公", "qinai" to "亲爱", "aigu" to "爱国"
+            "laogong" to "老公", "qinai" to "亲爱", "aigu" to "爱国"
         )
 
         // Per-syllable ranked characters (rough everyday frequency order). All keys are valid syllables.

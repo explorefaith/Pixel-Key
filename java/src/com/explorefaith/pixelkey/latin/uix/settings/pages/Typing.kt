@@ -60,6 +60,7 @@ import com.explorefaith.pixelkey.latin.uix.KeyHintsSetting
 import com.explorefaith.pixelkey.latin.uix.KeyboardBottomOffsetSetting
 import com.explorefaith.pixelkey.latin.uix.KeyboardFontSetting
 import com.explorefaith.pixelkey.latin.uix.SpacebarColorSetting
+import com.explorefaith.pixelkey.latin.uix.ONE_HANDED_MODE
 import com.explorefaith.pixelkey.latin.uix.KeyboardHeightMultiplierSetting
 import com.explorefaith.pixelkey.latin.uix.PreferenceUtils
 import com.explorefaith.pixelkey.latin.uix.SHOW_EMOJI_SUGGESTIONS
@@ -483,6 +484,16 @@ fun TypingScreen(navController: NavHostController = rememberNavController()) {
             setting = useDataStore(
                 key = SpacebarColorSetting.key,
                 default = SpacebarColorSetting.default
+            )
+        )
+
+        SettingRadio(
+            title = "One-Handed Mode",
+            options = listOf("off", "left", "right"),
+            optionNames = listOf("Off", "Left-Handed", "Right-Handed"),
+            setting = useDataStore(
+                key = ONE_HANDED_MODE.key,
+                default = ONE_HANDED_MODE.default
             )
         )
 
