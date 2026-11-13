@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.material3.ColorScheme
 import com.explorefaith.pixelkey.latin.uix.theme.presets.AMOLEDDarkPurple
-import com.explorefaith.pixelkey.latin.uix.theme.presets.AMOLEDNothing
+import com.explorefaith.pixelkey.latin.uix.theme.presets.AMOLEDOnyx
 import com.explorefaith.pixelkey.latin.uix.theme.presets.PixelTheme
-import com.explorefaith.pixelkey.latin.uix.theme.presets.NothingLight
-import com.explorefaith.pixelkey.latin.uix.theme.presets.NothingDark
+import com.explorefaith.pixelkey.latin.uix.theme.presets.PorcelainLight
+import com.explorefaith.pixelkey.latin.uix.theme.presets.InkDark
 import com.explorefaith.pixelkey.latin.uix.theme.presets.ClassicMaterialDark
 import com.explorefaith.pixelkey.latin.uix.theme.presets.ClassicMaterialLight
 import com.explorefaith.pixelkey.latin.uix.theme.presets.CottonCandy
@@ -15,7 +15,7 @@ import com.explorefaith.pixelkey.latin.uix.theme.presets.DeepSeaDark
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DeepSeaLight
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicDarkTheme
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicLightTheme
-import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicNothing
+import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicPixel
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicSystemTheme
 import com.explorefaith.pixelkey.latin.uix.theme.presets.Emerald
 import com.explorefaith.pixelkey.latin.uix.theme.presets.Snowfall
@@ -35,7 +35,7 @@ val ThemeOptions = mapOf(
     PixelTheme.key to PixelTheme,
     VoiceInputTheme.key to VoiceInputTheme,
 
-    DynamicNothing.key to DynamicNothing,
+    DynamicPixel.key to DynamicPixel,
     DynamicSystemTheme.key to DynamicSystemTheme,
     DynamicDarkTheme.key to DynamicDarkTheme,
     DynamicLightTheme.key to DynamicLightTheme,
@@ -43,9 +43,9 @@ val ThemeOptions = mapOf(
     ClassicMaterialDark.key to ClassicMaterialDark,
     ClassicMaterialLight.key to ClassicMaterialLight,
     AMOLEDDarkPurple.key to AMOLEDDarkPurple,
-    AMOLEDNothing.key to AMOLEDNothing,
-    NothingLight.key to NothingLight,
-    NothingDark.key to NothingDark,
+    AMOLEDOnyx.key to AMOLEDOnyx,
+    PorcelainLight.key to PorcelainLight,
+    InkDark.key to InkDark,
 
     Sunflower.key to Sunflower,
     Snowfall.key to Snowfall,

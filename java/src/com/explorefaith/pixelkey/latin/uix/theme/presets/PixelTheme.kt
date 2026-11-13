@@ -13,19 +13,19 @@ import com.explorefaith.pixelkey.latin.R
 import com.explorefaith.pixelkey.latin.uix.theme.ThemeOption
 
 // Matte Bauhaus Nothing Theme Palette
-val PixelMatteYellow = Color(0xFFE2B438)
-val PixelMatteBlue = Color(0xFF2A5288)
-val PixelMatteRed = Color(0xFFC23636)
-val PixelMatteWhite = Color(0xFFEAE6E1)
-val PixelMatteDark = Color(0xFF1C1D20)
+val PixelMatteYellow = Color(0xFFF0C24B)
+val PixelMatteBlue = Color(0xFF3B6EA5)
+val PixelMatteRed = Color(0xFFD64550)
+val PixelMatteWhite = Color(0xFFE9E7E3)
+val PixelMatteDark = Color(0xFF212329)
 val PixelBlack = Color(0xFF000000)
 
 private val pixelColorScheme = darkColorScheme(
-    primary = PixelMatteRed,
+    primary = Color(0xFFA5B4FC),
     onPrimary = Color(0xFFFFFFFF),
     primaryContainer = PixelMatteDark,
     onPrimaryContainer = Color(0xFFFFFFFF),
-    secondary = PixelMatteBlue,
+    secondary = Color(0xFF3B6EA5),
     onSecondary = Color(0xFFFFFFFF),
     secondaryContainer = PixelMatteDark,
     onSecondaryContainer = Color(0xFFFFFFFF),
@@ -37,7 +37,7 @@ private val pixelColorScheme = darkColorScheme(
     onSurface = Color(0xFFFFFFFF),
     surfaceVariant = PixelMatteDark,
     onSurfaceVariant = Color(0xFFFFFFFF),
-    outline = PixelMatteYellow,
+    outline = Color(0xFF8E90A0),
     outlineVariant = Color(0xFF2B2D31)
 )
 

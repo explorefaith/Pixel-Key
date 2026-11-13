@@ -57,14 +57,14 @@ import com.explorefaith.pixelkey.latin.uix.theme.ThemeOptions
 import com.explorefaith.pixelkey.latin.uix.theme.Typography
 import com.explorefaith.pixelkey.latin.uix.theme.UixThemeWrapper
 import com.explorefaith.pixelkey.latin.uix.theme.presets.AMOLEDDarkPurple
-import com.explorefaith.pixelkey.latin.uix.theme.presets.AMOLEDNothing
+import com.explorefaith.pixelkey.latin.uix.theme.presets.AMOLEDOnyx
 import com.explorefaith.pixelkey.latin.uix.theme.presets.PixelPreviewKeyboard
-import com.explorefaith.pixelkey.latin.uix.theme.presets.NothingLight
-import com.explorefaith.pixelkey.latin.uix.theme.presets.NothingDark
+import com.explorefaith.pixelkey.latin.uix.theme.presets.PorcelainLight
+import com.explorefaith.pixelkey.latin.uix.theme.presets.InkDark
 import com.explorefaith.pixelkey.latin.uix.theme.presets.ClassicMaterialDark
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicDarkTheme
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicLightTheme
-import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicNothing
+import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicPixel
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicSystemTheme
 import com.explorefaith.pixelkey.latin.uix.theme.presets.VoiceInputTheme
 import kotlin.math.roundToInt
@@ -344,28 +344,28 @@ private fun ThemePickerPreview() {
                 ThemePicker {}
             }
         }
-        UixThemeWrapper(AMOLEDNothing.obtainColors(LocalContext.current)) {
+        UixThemeWrapper(AMOLEDOnyx.obtainColors(LocalContext.current)) {
             Surface(
                 color = MaterialTheme.colorScheme.background
             ) {
                 ThemePicker {}
             }
         }
-        UixThemeWrapper(DynamicNothing.obtainColors(LocalContext.current)) {
+        UixThemeWrapper(DynamicPixel.obtainColors(LocalContext.current)) {
             Surface(
                 color = MaterialTheme.colorScheme.background
             ) {
                 ThemePicker {}
             }
         }
-        UixThemeWrapper(NothingLight.obtainColors(LocalContext.current)) {
+        UixThemeWrapper(PorcelainLight.obtainColors(LocalContext.current)) {
             Surface(
                 color = MaterialTheme.colorScheme.background
             ) {
                 ThemePicker {}
             }
         }
-        UixThemeWrapper(NothingDark.obtainColors(LocalContext.current)) {
+        UixThemeWrapper(InkDark.obtainColors(LocalContext.current)) {
             Surface(
                 color = MaterialTheme.colorScheme.background
             ) {

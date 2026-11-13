@@ -11,16 +11,21 @@ import androidx.compose.ui.unit.sp
 import com.explorefaith.pixelkey.latin.R
 
 @OptIn(ExperimentalTextApi::class)
-val Doto = FontFamily(
+val SpaceGrotesk = FontFamily(
     Font(
-        resId = R.font.doto,
-        weight = FontWeight.Bold,
-        variationSettings = FontVariation.Settings(FontVariation.weight(700))
+        resId = R.font.space_grotesk,
+        weight = FontWeight.Medium,
+        variationSettings = FontVariation.Settings(FontVariation.weight(500))
     ),
     Font(
-        resId = R.font.doto,
-        weight = FontWeight.Black,
-        variationSettings = FontVariation.Settings(FontVariation.weight(900))
+        resId = R.font.space_grotesk,
+        weight = FontWeight.SemiBold,
+        variationSettings = FontVariation.Settings(FontVariation.weight(600))
+    ),
+    Font(
+        resId = R.font.space_grotesk,
+        weight = FontWeight.Bold,
+        variationSettings = FontVariation.Settings(FontVariation.weight(700))
     ),
 )
 
@@ -50,22 +55,22 @@ val Inter = FontFamily(
 
 val Typography = Typography(
     titleLarge = TextStyle(
-        fontFamily = Doto,
+        fontFamily = SpaceGrotesk,
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
-        lineHeight = 26.sp,
-        letterSpacing = 0.5.sp
+        fontSize = 24.sp,
+        lineHeight = 30.sp,
+        letterSpacing = 0.2.sp
     ),
     titleMedium = TextStyle(
-        fontFamily = Doto,
-        fontWeight = FontWeight.Bold,
+        fontFamily = SpaceGrotesk,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 17.sp,
-        lineHeight = 21.sp,
-        letterSpacing = 0.5.sp
+        lineHeight = 22.sp,
+        letterSpacing = 0.2.sp
     ),
     titleSmall = TextStyle(
-        fontFamily = Inter,
-        fontWeight = FontWeight.SemiBold,
+        fontFamily = SpaceGrotesk,
+        fontWeight = FontWeight.Medium,
         fontSize = 15.sp,
         lineHeight = 20.sp
     ),
@@ -89,10 +94,10 @@ val Typography = Typography(
         lineHeight = 16.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = Doto,
-        fontWeight = FontWeight.Bold,
+        fontFamily = SpaceGrotesk,
+        fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
         lineHeight = 14.sp,
-        letterSpacing = 0.5.sp
+        letterSpacing = 0.8.sp
     )
 )

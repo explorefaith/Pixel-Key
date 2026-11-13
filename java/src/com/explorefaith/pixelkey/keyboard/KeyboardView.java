@@ -190,7 +190,7 @@ public class KeyboardView extends View {
         mDefaultKeyLabelFlags = keyAttr.getInt(R.styleable.Keyboard_Key_keyLabelFlags, 0);
         Typeface typeface = (mDrawableProvider != null && mDrawableProvider.getKeyboardTypeface() != null)
                 ? mDrawableProvider.getKeyboardTypeface()
-                : ResourcesCompat.getFont(context, R.font.ndot_family);
+                : ResourcesCompat.getFont(context, R.font.space_grotesk);
 
         mKeyVisualAttributes = KeyVisualAttributes.newInstance(keyAttr, mDrawableProvider, typeface);
 

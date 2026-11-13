@@ -8,18 +8,18 @@ import com.explorefaith.pixelkey.latin.R
 import com.explorefaith.pixelkey.latin.uix.theme.ThemeOption
 import com.explorefaith.pixelkey.latin.uix.theme.selector.ThemePreview
 
-private val md_theme_dark_primary = Color(0xFFD0BCFF)
-private val md_theme_dark_onPrimary = Color(0xFF381E72)
-private val md_theme_dark_primaryContainer = Color(0xFF4F378B)
-private val md_theme_dark_onPrimaryContainer = Color(0xFFEADDFF)
-private val md_theme_dark_secondary = Color(0xFFFFFFFF)
+private val md_theme_dark_primary = Color(0xFFA5B4FC)
+private val md_theme_dark_onPrimary = Color(0xFF1E1B4B)
+private val md_theme_dark_primaryContainer = Color(0xFF23255F)
+private val md_theme_dark_onPrimaryContainer = Color(0xFFE0E7FF)
+private val md_theme_dark_secondary = Color(0xFFC7C9D4)
 private val md_theme_dark_onSecondary = Color(0xFF000000)
-private val md_theme_dark_secondaryContainer = Color(0xFF4A4458)
-private val md_theme_dark_onSecondaryContainer = Color(0xFFE8DEF8)
-private val md_theme_dark_tertiary = Color(0xFFEFB8C8)
-private val md_theme_dark_onTertiary = Color(0xFF492532)
-private val md_theme_dark_tertiaryContainer = Color(0xFF633B48)
-private val md_theme_dark_onTertiaryContainer = Color(0xFFFFD8E4)
+private val md_theme_dark_secondaryContainer = Color(0xFF20222B)
+private val md_theme_dark_onSecondaryContainer = Color(0xFFE4E5EC)
+private val md_theme_dark_tertiary = Color(0xFFFBBF24)
+private val md_theme_dark_onTertiary = Color(0xFF422006)
+private val md_theme_dark_tertiaryContainer = Color(0xFF3D2E06)
+private val md_theme_dark_onTertiaryContainer = Color(0xFFFEF3C7)
 private val md_theme_dark_error = Color(0xFFF2B8B5)
 private val md_theme_dark_onError = Color(0xFF601410)
 private val md_theme_dark_errorContainer = Color(0xFF8C1D18)
@@ -29,34 +29,34 @@ private val md_theme_dark_background = Color(0xFF000000)
 private val md_theme_dark_onBackground = Color(0xFFE6E1E5)
 private val md_theme_dark_surface = Color(0xFF000000)
 private val md_theme_dark_onSurface = Color(0xFFE6E1E5)
-private val md_theme_dark_surfaceVariant = Color(0xFF49454F)
-private val md_theme_dark_onSurfaceVariant = Color(0xFFCAC4D0)
+private val md_theme_dark_surfaceVariant = Color(0xFF17181D)
+private val md_theme_dark_onSurfaceVariant = Color(0xFFC3C4CF)
 private val md_theme_dark_inverseSurface = Color(0xFFE6E1E5)
 private val md_theme_dark_inverseOnSurface = Color(0xFF313033)
 private val md_theme_dark_inversePrimary = Color(0xFF6750A4)
 private val md_theme_dark_shadow = Color(0xFF000000)
-private val md_theme_dark_surfaceTint = Color(0xFFD0BCFF)
-private val md_theme_dark_outlineVariant = Color(0xFF49454F)
+private val md_theme_dark_surfaceTint = Color(0xFFA5B4FC)
+private val md_theme_dark_outlineVariant = Color(0xFF232530)
 private val md_theme_dark_scrim = Color(0xFF000000)
 
-private val nothing_red = Color(0xFFD71921)
-private val nothing_white = Color(0xFFFFFFFF)
+private val pixel_accent = Color(0xFFD71921)
+private val pixel_text = Color(0xFFFFFFFF)
 private val nothing_black = Color(0xFF000000)
-private val nothing_grey = Color(0xFF0D0C11);
-private val nothing_grey_2 = Color(0xFF1B1A1F);
-private val nothing_grey_3 = Color(0xFF151419);
+private val pixel_variant = Color(0xFF0D0C11);
+private val pixel_on_variant = Color(0xFF1B1A1F);
+private val pixel_container = Color(0xFF151419);
 
 private val colorScheme = darkColorScheme(
-    primary = nothing_red,
-    onPrimary = nothing_white,
-    primaryContainer = nothing_white,
+    primary = pixel_accent,
+    onPrimary = pixel_text,
+    primaryContainer = pixel_text,
     onPrimaryContainer = nothing_black,
     secondary = md_theme_dark_secondary,
     onSecondary = md_theme_dark_onSecondary,
     secondaryContainer = md_theme_dark_secondaryContainer,
     onSecondaryContainer = md_theme_dark_onSecondaryContainer,
-    tertiary = nothing_grey,
-    onTertiary = nothing_white,
+    tertiary = pixel_variant,
+    onTertiary = pixel_text,
     tertiaryContainer = md_theme_dark_tertiaryContainer,
     onTertiaryContainer = md_theme_dark_onTertiaryContainer,
     error = md_theme_dark_error,
@@ -64,12 +64,12 @@ private val colorScheme = darkColorScheme(
     errorContainer = md_theme_dark_errorContainer,
     onErrorContainer = md_theme_dark_onErrorContainer,
     outline = md_theme_dark_outline,
-    background = nothing_grey_3,
+    background = pixel_container,
     onBackground = md_theme_dark_onBackground,
-    surface = nothing_grey_2,
+    surface = pixel_on_variant,
     onSurface = md_theme_dark_onSurface,
-    surfaceVariant = nothing_grey,
-    onSurfaceVariant = nothing_white,
+    surfaceVariant = pixel_variant,
+    onSurfaceVariant = pixel_text,
     inverseSurface = md_theme_dark_inverseSurface,
     inverseOnSurface = md_theme_dark_inverseOnSurface,
     inversePrimary = md_theme_dark_inversePrimary,
@@ -78,10 +78,10 @@ private val colorScheme = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
-val AMOLEDNothing = ThemeOption(
+val AMOLEDOnyx = ThemeOption(
     dynamic = false,
-    key = "AMOLEDNothing",
-    name = R.string.amoled_nothing_theme_name,
+    key = "AMOLEDOnyx",
+    name = R.string.theme_onyx,
     available = { true }
 ) {
     colorScheme
@@ -90,5 +90,5 @@ val AMOLEDNothing = ThemeOption(
 @Composable
 @Preview
 private fun PreviewTheme() {
-    ThemePreview(AMOLEDNothing)
+    ThemePreview(AMOLEDOnyx)
 }

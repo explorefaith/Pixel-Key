@@ -69,18 +69,17 @@ import com.explorefaith.pixelkey.latin.settings.Settings
 import com.explorefaith.pixelkey.latin.uix.settings.useDataStore
 import com.explorefaith.pixelkey.latin.uix.settings.useDataStoreValue
 import com.explorefaith.pixelkey.latin.uix.settings.useSharedPrefsBool
-import com.explorefaith.pixelkey.latin.uix.theme.Doto
+import com.explorefaith.pixelkey.latin.uix.theme.SpaceGrotesk
 import com.explorefaith.pixelkey.latin.uix.theme.Inter
 import com.explorefaith.pixelkey.updates.AppUpdate
 import com.explorefaith.pixelkey.updates.UpdateChecker
 import com.explorefaith.pixelkey.updates.UpdateSheet
+import androidx.compose.material3.MaterialTheme
 
-private val PixelRed = Color(0xFFE5252A)
+private val PixelAccent = Color(0xFF6366F1)
 private val CardBackground = Color(0xFF0E0E11)
-private val SurfaceVariant = Color(0xFF1B1B1F)
 private val BorderColor = Color(0xFF26262B)
 private val DividerColor = Color(0xFF1E1E22)
-private val TextSecondary = Color(0xFF8E8E93)
 
 @Composable
 fun BengaliLayoutToggleRow(
@@ -103,13 +102,13 @@ fun BengaliLayoutToggleRow(
                 fontFamily = Inter,
                 fontWeight = FontWeight.Medium,
                 fontSize = 15.sp,
-                color = Color.White
+                color = MaterialTheme.colorScheme.onBackground
             )
             Text(
                 text = subtitle,
                 fontFamily = Inter,
                 fontSize = 12.sp,
-                color = TextSecondary
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
         Switch(
@@ -117,10 +116,10 @@ fun BengaliLayoutToggleRow(
             enabled = canToggle,
             onCheckedChange = onToggle,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = Color.White,
-                checkedTrackColor = PixelRed,
-                uncheckedThumbColor = TextSecondary,
-                uncheckedTrackColor = SurfaceVariant
+                checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                checkedTrackColor = PixelAccent,
+                uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
             )
         )
     }
@@ -193,7 +192,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
@@ -215,33 +214,33 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                 Column {
                     Text(
                         "PIXEL KEY",
-                        fontFamily = Doto,
+                        fontFamily = SpaceGrotesk,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         letterSpacing = 1.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
                         "Crafted for clarity",
                         fontFamily = Inter,
                         fontSize = 12.sp,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
-                        .background(PixelRed.copy(alpha = 0.15f))
-                        .border(1.dp, PixelRed.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
+                        .background(PixelAccent.copy(alpha = 0.15f))
+                        .border(1.dp, PixelAccent.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
                     Text(
                         "v${BuildConfig.VERSION_NAME}",
-                        fontFamily = Doto,
+                        fontFamily = SpaceGrotesk,
                         fontWeight = FontWeight.Bold,
                         fontSize = 11.sp,
-                        color = PixelRed
+                        color = PixelAccent
                     )
                 }
             }
@@ -502,14 +501,14 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                             modifier = Modifier
                                 .size(38.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(SurfaceVariant)
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
                                 .border(1.dp, BorderColor, RoundedCornerShape(10.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.activity),
                                 contentDescription = null,
-                                tint = PixelRed,
+                                tint = PixelAccent,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -519,13 +518,13 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                                 fontFamily = Inter,
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 15.sp,
-                                color = Color.White
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                             Text(
                                 if (isCheckingUpdate) "Checking releases..." else "Version ${BuildConfig.VERSION_NAME} • Tap to check",
                                 fontFamily = Inter,
                                 fontSize = 12.sp,
-                                color = TextSecondary
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
@@ -533,14 +532,14 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     if (isCheckingUpdate) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(18.dp),
-                            color = PixelRed,
+                            color = PixelAccent,
                             strokeWidth = 2.dp
                         )
                     } else {
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(14.dp))
-                                .background(SurfaceVariant)
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
                                 .border(1.dp, BorderColor, RoundedCornerShape(14.dp))
                                 .padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {

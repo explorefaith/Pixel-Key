@@ -34,13 +34,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.explorefaith.pixelkey.latin.uix.theme.Doto
+import com.explorefaith.pixelkey.latin.uix.theme.SpaceGrotesk
 import com.explorefaith.pixelkey.latin.uix.theme.Inter
+import androidx.compose.material3.MaterialTheme
 
-private val PixelRed = Color(0xFFE5252A)
-private val CardBorder = Color(0xFF26262B)
-private val SurfaceVariant = Color(0xFF1B1B1F)
-private val TextSecondary = Color(0xFF8E8E93)
+private val PixelAccent = Color(0xFF6366F1)
 
 object DeveloperInfo {
     const val NAME = "Eyasin Arafat"
@@ -143,14 +141,14 @@ fun DeveloperDetailsCard(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .size(42.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(SurfaceVariant)
-                        .border(1.dp, CardBorder, RoundedCornerShape(12.dp)),
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.people_and_body),
                         contentDescription = null,
-                        tint = PixelRed,
+                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(22.dp)
                     )
                 }
@@ -158,17 +156,17 @@ fun DeveloperDetailsCard(modifier: Modifier = Modifier) {
                 Column {
                     Text(
                         text = DeveloperInfo.NAME,
-                        fontFamily = Doto,
+                        fontFamily = SpaceGrotesk,
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
                         letterSpacing = 0.5.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "Developer & Designer",
                         fontFamily = Inter,
                         fontSize = 12.sp,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -183,8 +181,8 @@ fun DeveloperDetailsCard(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape)
-                        .background(SurfaceVariant)
-                        .border(1.dp, CardBorder, CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
                         .clickable { DeveloperInfo.openUrl(context, DeveloperInfo.GITHUB_URL) },
                     contentAlignment = Alignment.Center
                 ) {
@@ -201,8 +199,8 @@ fun DeveloperDetailsCard(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape)
-                        .background(SurfaceVariant)
-                        .border(1.dp, CardBorder, CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
                         .clickable { DeveloperInfo.openUrl(context, DeveloperInfo.INSTAGRAM_URL) },
                     contentAlignment = Alignment.Center
                 ) {
@@ -214,8 +212,8 @@ fun DeveloperDetailsCard(modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape)
-                        .background(SurfaceVariant)
-                        .border(1.dp, CardBorder, CircleShape)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
                         .clickable { DeveloperInfo.openUrl(context, DeveloperInfo.WHATSAPP_URL) },
                     contentAlignment = Alignment.Center
                 ) {

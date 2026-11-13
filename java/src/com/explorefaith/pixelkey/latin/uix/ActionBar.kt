@@ -161,7 +161,7 @@ interface ImportantNotice {
 
 
 val suggestionStylePrimary = TextStyle(
-    fontFamily = FontFamily(Font(R.font.ndot_family)),
+    fontFamily = FontFamily(Font(R.font.space_grotesk)),
     fontWeight = FontWeight.Normal,
     fontSize = 18.sp,
     lineHeight = 26.sp,
@@ -170,7 +170,7 @@ val suggestionStylePrimary = TextStyle(
 )
 
 val suggestionStyleAlternative = TextStyle(
-    fontFamily = FontFamily(Font(R.font.ndot_family)),
+    fontFamily = FontFamily(Font(R.font.space_grotesk)),
     fontWeight = FontWeight.Normal,
     fontSize = 18.sp,
     lineHeight = 26.sp,
@@ -249,7 +249,7 @@ fun RowScope.SuggestionItem(words: SuggestedWords, idx: Int, isPrimary: Boolean,
 
     val (keyboardFont, _) = useDataStore(key = KeyboardFontSetting.key, default = KeyboardFontSetting.default)
     val containsIndic = word?.any { it.code in 0x0980..0x09FF } == true
-    val font = if (keyboardFont == "normal" || containsIndic) FontFamily.Default else FontFamily(Font(R.font.ndot_family))
+    val font = if (keyboardFont == "normal" || containsIndic) FontFamily.Default else FontFamily(Font(R.font.space_grotesk))
     val textStyle = when (actualIsPrimary) {
         true -> suggestionStylePrimary
         false -> suggestionStyleAlternative

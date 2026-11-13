@@ -20,43 +20,43 @@ import com.explorefaith.pixelkey.latin.uix.theme.presets.VoiceInputTheme
 import androidx.compose.ui.graphics.Color
 import kotlin.math.sqrt
 
-val PixelRed = Color(0xFFE5252A)
-val NothingBlack = Color(0xFF000000)
-val NothingCardSurface = Color(0xFF0E0E11)
-val NothingSurfaceVariant = Color(0xFF1B1B1F)
-val NothingBorder = Color(0xFF26262B)
-val NothingWhite = Color(0xFFFFFFFF)
-val NothingTextSecondary = Color(0xFF8E8E93)
+val PixelAccent = Color(0xFF6366F1)
+val PixelInk = Color(0xFF000000)
+val PixelCardSurface = Color(0xFF191B22)
+val PixelSurfaceVariant2 = Color(0xFF232530)
+val PixelCardBorder = Color(0xFF2E303C)
+val PixelTextPrimary = Color(0xFFFFFFFF)
+val PixelTextMuted = Color(0xFFA0A1AC)
 
 val DarkColorScheme = darkColorScheme(
-    primary = PixelRed,
-    onPrimary = NothingWhite,
+    primary = PixelAccent,
+    onPrimary = PixelTextPrimary,
 
-    primaryContainer = NothingSurfaceVariant,
-    onPrimaryContainer = NothingWhite,
+    primaryContainer = PixelSurfaceVariant2,
+    onPrimaryContainer = PixelTextPrimary,
 
-    secondary = NothingWhite,
-    onSecondary = NothingBlack,
+    secondary = PixelTextPrimary,
+    onSecondary = PixelInk,
 
-    secondaryContainer = NothingSurfaceVariant,
-    onSecondaryContainer = NothingWhite,
+    secondaryContainer = PixelSurfaceVariant2,
+    onSecondaryContainer = PixelTextPrimary,
 
-    tertiary = PixelRed,
-    onTertiary = NothingWhite,
+    tertiary = Color(0xFFFBBF24),
+    onTertiary = PixelTextPrimary,
 
-    tertiaryContainer = NothingSurfaceVariant,
-    onTertiaryContainer = NothingWhite,
+    tertiaryContainer = PixelSurfaceVariant2,
+    onTertiaryContainer = PixelTextPrimary,
 
-    background = NothingBlack,
-    onBackground = NothingWhite,
+    background = PixelInk,
+    onBackground = PixelTextPrimary,
 
-    surface = NothingCardSurface,
-    onSurface = NothingWhite,
+    surface = PixelCardSurface,
+    onSurface = PixelTextPrimary,
 
-    outline = NothingBorder,
+    outline = PixelCardBorder,
 
-    surfaceVariant = NothingSurfaceVariant,
-    onSurfaceVariant = NothingTextSecondary
+    surfaceVariant = PixelSurfaceVariant2,
+    onSurfaceVariant = PixelTextMuted
 )
 
 fun applyWindowColors(window: Window, @ColorInt color: Int, statusBar: Boolean) {

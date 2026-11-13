@@ -11,21 +11,21 @@ import com.explorefaith.pixelkey.latin.common.Constants
 object PixelThemeHelper {
     var customSpacebarColor: Int? = null
 
-    // Matte Bauhaus Nothing OS Color Palette
+    // Pixel Key matte palette (Bauhaus-inspired, softly brightened on press)
     const val COLOR_BLACK = 0xFF000000.toInt()
-    const val COLOR_DARK = 0xFF1C1D20.toInt()      // Matte Graphite Slate
-    const val COLOR_YELLOW = 0xFFE2B438.toInt()    // Matte Warm Ochre / Bauhaus Mustard
-    const val COLOR_BLUE = 0xFF2A5288.toInt()      // Matte Bauhaus Cobalt / Navy Slate
-    const val COLOR_RED = 0xFFC23636.toInt()       // Matte Nothing Carmine / Brick Red
-    const val COLOR_WHITE = 0xFFEAE6E1.toInt()     // Matte Chalk / Soft Alabaster
+    const val COLOR_DARK = 0xFF212329.toInt()      // Matte Graphite
+    const val COLOR_YELLOW = 0xFFF0C24B.toInt()    // Matte Ochre
+    const val COLOR_BLUE = 0xFF3B6EA5.toInt()      // Matte Cobalt
+    const val COLOR_RED = 0xFFD64550.toInt()       // Matte Carmine
+    const val COLOR_WHITE = 0xFFE9E7E3.toInt()     // Matte Chalk
     const val COLOR_TEXT_DARK = 0xFF121212.toInt() // Matte Black for text on light keys
 
-    // Pressed matte colors
-    const val COLOR_DARK_PRESSED = 0xFF2B2D31.toInt()
-    const val COLOR_YELLOW_PRESSED = 0xFFC49B28.toInt()
-    const val COLOR_BLUE_PRESSED = 0xFF203F68.toInt()
-    const val COLOR_RED_PRESSED = 0xFF9E2828.toInt()
-    const val COLOR_WHITE_PRESSED = 0xFFC8C4BE.toInt()
+    // Pressed colors (soft brighten)
+    const val COLOR_DARK_PRESSED = 0xFF33363F.toInt()
+    const val COLOR_YELLOW_PRESSED = 0xFFF7D278.toInt()
+    const val COLOR_BLUE_PRESSED = 0xFF5486C4.toInt()
+    const val COLOR_RED_PRESSED = 0xFFE96E77.toInt()
+    const val COLOR_WHITE_PRESSED = 0xFFF6F4F0.toInt()
 
     private val colorByLabel = buildMap<String, Int> {
         val base = mapOf(

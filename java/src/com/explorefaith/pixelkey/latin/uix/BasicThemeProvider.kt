@@ -221,11 +221,11 @@ class BasicThemeProvider(
         }
         PixelThemeHelper.customSpacebarColor = customSpaceColor
         keyboardTypeface = if (isPixelTheme) {
-            ResourcesCompat.getFont(context, R.font.ndot_family) ?: Typeface.DEFAULT
+            ResourcesCompat.getFont(context, R.font.space_grotesk) ?: Typeface.DEFAULT
         } else if (keyboardFont == "normal") {
             Typeface.DEFAULT
         } else {
-            ResourcesCompat.getFont(context, R.font.ndot_family)
+            ResourcesCompat.getFont(context, R.font.space_grotesk)
         }
 
         val primary = colorScheme.primary.toArgb()
@@ -358,7 +358,7 @@ class BasicThemeProvider(
 
             addStateWithHighlightLayerOnPressed(highlight, intArrayOf(android.R.attr.state_checkable),
                 if(keyBorders) {
-                    coloredRoundedRectangle(keyColor, dp(8.dp))
+                    coloredRoundedRectangle(keyColor, dp(12.dp))
                 } else {
                     coloredRectangle(transparent)
                 }
@@ -374,7 +374,7 @@ class BasicThemeProvider(
 
             addStateWithHighlightLayerOnPressed(highlight, intArrayOf(android.R.attr.state_empty),
                 if(keyBorders) {
-                    coloredRoundedRectangle(keyColor, dp(8.dp))
+                    coloredRoundedRectangle(keyColor, dp(12.dp))
                 } else {
                     coloredRectangle(transparent)
                 }
@@ -382,7 +382,7 @@ class BasicThemeProvider(
 
             addStateWithHighlightLayerOnPressed(highlight, intArrayOf(),
                 if(keyBorders) {
-                    coloredRoundedRectangle(keyColor, dp(8.dp))
+                    coloredRoundedRectangle(keyColor, dp(12.dp))
                 } else {
                     coloredRectangle(transparent)
                 }
@@ -390,7 +390,7 @@ class BasicThemeProvider(
         }
 
         val spaceCornerRadius = if(keyBorders) {
-            8.dp
+            12.dp
         } else {
             48.dp
         }
@@ -465,7 +465,7 @@ class BasicThemeProvider(
 
     private fun ensureDimensions() {
         if (cachedCornerRadius < 0f) {
-            cachedCornerRadius = dp(8.dp)
+            cachedCornerRadius = dp(12.dp)
             cachedPreviewWidth = dp(48.dp).roundToInt()
             cachedPreviewHeight = dp(24.dp).roundToInt()
             cachedPreviewPadding = dp(50.dp).roundToInt()

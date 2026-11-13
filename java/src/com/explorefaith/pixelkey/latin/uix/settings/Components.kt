@@ -99,14 +99,14 @@ fun ScreenTitle(title: String, showBack: Boolean = false, navController: NavHost
                 modifier = Modifier
                     .size(36.dp)
                     .clip(androidx.compose.foundation.shape.CircleShape)
-                    .background(Color(0xFF1B1B1F))
-                    .border(1.dp, Color(0xFF26262B), androidx.compose.foundation.shape.CircleShape),
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, androidx.compose.foundation.shape.CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     Icons.Default.ArrowBack,
                     contentDescription = null,
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(18.dp)
                 )
             }
@@ -115,7 +115,7 @@ fun ScreenTitle(title: String, showBack: Boolean = false, navController: NavHost
         Text(
             title,
             style = Typography.titleLarge,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(vertical = 16.dp)
         )
     }

@@ -38,10 +38,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.explorefaith.pixelkey.latin.R
-import com.explorefaith.pixelkey.latin.uix.theme.Doto
+import com.explorefaith.pixelkey.latin.uix.theme.SpaceGrotesk
 import com.explorefaith.pixelkey.latin.uix.theme.Inter
 
-private val PixelRed = Color(0xFFE5252A)
+private val PixelAccent = Color(0xFF6366F1)
 private val CardBackground = Color(0xFF0E0E11)
 private val SurfaceVariant = Color(0xFF1B1B1F)
 private val BorderColor = Color(0xFF26262B)
@@ -98,14 +98,14 @@ fun AnnouncementSheet(
                         modifier = Modifier
                             .size(38.dp)
                             .clip(CircleShape)
-                            .background(if (announcement.isCritical) PixelRed.copy(alpha = 0.15f) else Color.White.copy(alpha = 0.1f))
-                            .border(1.dp, if (announcement.isCritical) PixelRed.copy(alpha = 0.4f) else Color.White.copy(alpha = 0.2f), CircleShape),
+                            .background(if (announcement.isCritical) PixelAccent.copy(alpha = 0.15f) else Color.White.copy(alpha = 0.1f))
+                            .border(1.dp, if (announcement.isCritical) PixelAccent.copy(alpha = 0.4f) else Color.White.copy(alpha = 0.2f), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_campaign),
                             contentDescription = null,
-                            tint = if (announcement.isCritical) PixelRed else Color.White,
+                            tint = if (announcement.isCritical) PixelAccent else Color.White,
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -113,7 +113,7 @@ fun AnnouncementSheet(
                     Column {
                         Text(
                             text = announcement.title.uppercase(),
-                            fontFamily = Doto,
+                            fontFamily = SpaceGrotesk,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             letterSpacing = 0.5.sp,
@@ -134,16 +134,16 @@ fun AnnouncementSheet(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
-                        .background(if (announcement.isCritical) PixelRed else PixelRed.copy(alpha = 0.18f))
+                        .background(if (announcement.isCritical) PixelAccent else PixelAccent.copy(alpha = 0.18f))
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = if (announcement.isCritical) "CRITICAL" else announcement.badge.uppercase(),
-                        fontFamily = Doto,
+                        fontFamily = SpaceGrotesk,
                         fontWeight = FontWeight.Bold,
                         fontSize = 11.sp,
                         letterSpacing = 0.5.sp,
-                        color = if (announcement.isCritical) Color.White else PixelRed
+                        color = if (announcement.isCritical) Color.White else PixelAccent
                     )
                 }
             }
@@ -190,7 +190,7 @@ fun AnnouncementSheet(
                                             .padding(top = 6.dp)
                                             .size(5.dp)
                                             .clip(CircleShape)
-                                            .background(PixelRed)
+                                            .background(PixelAccent)
                                     )
                                     Text(
                                         text = highlight,
@@ -219,7 +219,7 @@ fun AnnouncementSheet(
                         .fillMaxWidth()
                         .height(48.dp)
                         .clip(RoundedCornerShape(24.dp))
-                        .background(PixelRed)
+                        .background(PixelAccent)
                         .clickable {
                             runCatching {
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(actionUrl)).apply {

@@ -37,11 +37,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.explorefaith.pixelkey.latin.BuildConfig
 import com.explorefaith.pixelkey.latin.R
-import com.explorefaith.pixelkey.latin.uix.theme.Doto
+import com.explorefaith.pixelkey.latin.uix.theme.SpaceGrotesk
 import com.explorefaith.pixelkey.latin.uix.theme.Inter
 import com.explorefaith.pixelkey.latin.uix.theme.Typography
 
-private val PixelRed = Color(0xFFE5252A)
+private val PixelAccent = Color(0xFF6366F1)
 private val CardBackground = Color(0xFF0E0E11)
 private val SurfaceVariant = Color(0xFF1B1B1F)
 private val TextSecondary = Color(0xFF8E8E93)
@@ -102,7 +102,7 @@ fun UpdateSheet(
                         Icon(
                             painter = painterResource(id = R.drawable.activity),
                             contentDescription = null,
-                            tint = PixelRed,
+                            tint = PixelAccent,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -110,7 +110,7 @@ fun UpdateSheet(
                     Column {
                         Text(
                             text = "UPDATE AVAILABLE",
-                            fontFamily = Doto,
+                            fontFamily = SpaceGrotesk,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             letterSpacing = 0.5.sp,
@@ -129,15 +129,15 @@ fun UpdateSheet(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(14.dp))
-                        .background(PixelRed.copy(alpha = 0.18f))
+                        .background(PixelAccent.copy(alpha = 0.18f))
                         .padding(horizontal = 10.dp, vertical = 6.dp)
                 ) {
                     Text(
                         text = "v${update.versionName}",
-                        fontFamily = Doto,
+                        fontFamily = SpaceGrotesk,
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
-                        color = PixelRed
+                        color = PixelAccent
                     )
                 }
             }
@@ -147,7 +147,7 @@ fun UpdateSheet(
             // Release Notes Card
             Text(
                 text = "RELEASE NOTES",
-                fontFamily = Doto,
+                fontFamily = SpaceGrotesk,
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp,
                 letterSpacing = 1.sp,
@@ -207,7 +207,7 @@ fun UpdateSheet(
                         .weight(1.5f)
                         .height(50.dp)
                         .clip(RoundedCornerShape(25.dp))
-                        .background(PixelRed)
+                        .background(PixelAccent)
                         .clickable {
                             if (update.downloadUrl.isNotBlank()) {
                                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(update.downloadUrl)).apply {

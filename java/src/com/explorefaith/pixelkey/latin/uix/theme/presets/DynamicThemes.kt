@@ -35,10 +35,10 @@ val DynamicSystemTheme = ThemeOption(
     }
 )
 
-val DynamicNothing = ThemeOption(
+val DynamicPixel = ThemeOption(
     dynamic = true,
-    key = "DynamicNothing",
-    name = R.string.dynamic_nothing_theme_name,
+    key = "DynamicPixel",
+    name = R.string.theme_dynamic_pixel,
     available = { Build.VERSION.SDK_INT >= Build.VERSION_CODES.S },
     obtainColors = {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
@@ -47,14 +47,14 @@ val DynamicNothing = ThemeOption(
 
         val uiModeManager = it.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
         when (uiModeManager.nightMode) {
-            UiModeManager.MODE_NIGHT_YES -> getNothingDarkColorScheme()
-            UiModeManager.MODE_NIGHT_NO -> getNothingLightColorScheme()
+            UiModeManager.MODE_NIGHT_YES -> getInkDarkColorScheme()
+            UiModeManager.MODE_NIGHT_NO -> getPorcelainLightColorScheme()
             else -> {
                 val currentNightMode = it.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
                 if(currentNightMode == Configuration.UI_MODE_NIGHT_NO) {
-                    getNothingLightColorScheme()
+                    getPorcelainLightColorScheme()
                 } else {
-                    getNothingDarkColorScheme()
+                    getInkDarkColorScheme()
                 }
             }
         }

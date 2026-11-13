@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,10 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.explorefaith.pixelkey.latin.uix.theme.Doto
+import com.explorefaith.pixelkey.latin.uix.theme.SpaceGrotesk
+import androidx.compose.material3.MaterialTheme
 
-private val PixelRed = Color(0xFFE5252A)
-private val TextSecondary = Color(0xFF8E8E93)
+private val PixelAccent = Color(0xFF6366F1)
 
 @Composable
 fun SectionHeader(
@@ -37,17 +37,17 @@ fun SectionHeader(
     ) {
         Text(
             text = title.uppercase(),
-            fontFamily = Doto,
+            fontFamily = SpaceGrotesk,
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp,
             letterSpacing = 1.sp,
-            color = TextSecondary
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.width(6.dp))
         Box(
             modifier = Modifier
                 .size(6.dp)
-                .background(PixelRed, CircleShape)
+                .background(PixelAccent, RoundedCornerShape(1.5.dp))
         )
     }
 }

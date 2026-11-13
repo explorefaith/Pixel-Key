@@ -157,7 +157,7 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
     private Key mRightEdgeKey = null;
 
     private DynamicThemeProvider mProvider = null;
-    private Typeface mNdotTypeface;
+    private Typeface mKeyLabelTypeface;
 
     public KeyboardBuilder(final Context context, @Nonnull final KP params) {
         mContext = context;
@@ -171,7 +171,7 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
         }
 
         final Resources res = context.getResources();
-        mNdotTypeface = ResourcesCompat.getFont(context, R.font.ndot_family);
+        mKeyLabelTypeface = ResourcesCompat.getFont(context, R.font.space_grotesk);
 
         mResources = res;
         mParams = params;
@@ -314,7 +314,7 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
 
             Typeface typeface = (mProvider != null && mProvider.getKeyboardTypeface() != null)
                     ? mProvider.getKeyboardTypeface()
-                    : mNdotTypeface;
+                    : mKeyLabelTypeface;
             params.mKeyVisualAttributes = KeyVisualAttributes.newInstance(keyAttr, mProvider, typeface);
 
             params.mMoreKeysTemplate = keyboardAttr.getResourceId(
