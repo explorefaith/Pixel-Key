@@ -1,4 +1,4 @@
-# Pixel Key — Active Issues & Feature Tracking
+# PixelKey — Active Issues & Feature Tracking
 
 ## Active & Resolved High-Priority Issues
 

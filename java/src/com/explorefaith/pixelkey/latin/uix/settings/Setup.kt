@@ -115,7 +115,7 @@ fun SetupEnableIME() {
             Step(fraction = 1.0f/2.0f, text = "Setup - Step 1 of 2")
 
             Text(
-                "Welcome to Pixel Key!\n\nFirst, enable Pixel Key as an input method.",
+                "Welcome to PixelKey!\n\nFirst, enable PixelKey as an input method.",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -155,7 +155,7 @@ fun SetupChangeDefaultIME(doublePackage: Boolean = true) {
             Step(fraction = 2.0f/2.0f, text = "Setup - Step 2 of 2")
 
             Text(
-                "Please select Pixel Key as your active input method.",
+                "Please select PixelKey as your active input method.",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -219,7 +219,7 @@ fun SetupEnableMic(onClick: () -> Unit = { }) {
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                Text("Pixel Key (needs mic permission)")
+                Text("PixelKey (needs mic permission)")
             }
 
             Button(

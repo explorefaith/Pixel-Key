@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Adversarial Stress Test Suite for Pixel Key Crash Remediation.
+ * Adversarial Stress Test Suite for PixelKey Crash Remediation.
  * Validates edge cases, mathematical boundary conditions, and null-safety guards:
  * 1. KeyPreviewView.setTextAndScaleX arithmetic with maxWidth <= 0, width == 0.0f, NaN, +Infinity, -Infinity.
  * 2. MoreKeysKeyboard with parentKeyboardWidth < keyWidth, keyWidth == 0, single more-key, many more-keys.

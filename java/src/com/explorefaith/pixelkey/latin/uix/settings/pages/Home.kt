@@ -203,7 +203,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Header: PIXEL KEY & Version Tag
+            // Header: PIXELKEY & Version Tag
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -213,7 +213,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
             ) {
                 Column {
                     Text(
-                        "PIXEL KEY",
+                        "PIXELKEY",
                         fontFamily = SpaceGrotesk,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
@@ -471,7 +471,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                                     } else {
                                         Toast.makeText(
                                             context,
-                                            "Pixel Key is up to date (v${BuildConfig.VERSION_NAME})",
+                                            "PixelKey is up to date (v${BuildConfig.VERSION_NAME})",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
@@ -479,7 +479,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                                 onFailure = {
                                     Toast.makeText(
                                         context,
-                                        "Pixel Key is up to date (v${BuildConfig.VERSION_NAME})",
+                                        "PixelKey is up to date (v${BuildConfig.VERSION_NAME})",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="crashed_text_email">Pixel Key has crashed! Please send a report to help us fix this.</string>
-    <string name="crashed_text">Pixel Key has crashed! Please send a report to help us fix this.</string>
+    <string name="crashed_text_email">PixelKey has crashed! Please send a report to help us fix this.</string>
+    <string name="crashed_text">PixelKey has crashed! Please send a report to help us fix this.</string>
     <string name="crashed_title">Crash Reporter</string>
 
     <string name="crash_report_accept">Send Report</string>

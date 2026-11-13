@@ -1,12 +1,12 @@
-# Pixel Key ⌨️ — A Modern, Privacy-First Android Keyboard
+# PixelKey ⌨️ — A Modern, Privacy-First Android Keyboard
 
-**Pixel Key** is a modern, high-performance, privacy-first Android virtual keyboard crafted with a clean Bauhaus-inspired design language. Designed for people who value minimalism, tactile beauty, and absolute privacy, Pixel Key combines an elegant matte palette, refined typography, dynamic per-key accent popups, and an advanced multilingual typing suite.
+**PixelKey** is a modern, high-performance, privacy-first Android virtual keyboard crafted with a clean Bauhaus-inspired design language. Designed for people who value minimalism, tactile beauty, and absolute privacy, PixelKey combines an elegant matte palette, refined typography, dynamic per-key accent popups, and an advanced multilingual typing suite.
 
 Zero internet permissions for core typing. Zero cloud logging. Zero tracking. Just pure, elevated typing.
 
 ---
 
-## 🌟 Why Pixel Key?
+## 🌟 Why PixelKey?
 
 ### 🎨 1. Bauhaus-Inspired Design Language
 - **Matte Palette**: Handcrafted matte tones designed for high legibility and OLED battery conservation
@@ -114,21 +114,21 @@ When reporting a bug, please include:
 If your voice typing is not responding or the microphone does not detect audio, Android may have restricted microphone access by default. Follow these steps to grant permission:
 
 1. **Quick Method:**
-   - On your home screen or app drawer, **long-press the Pixel Key app icon**.
+   - On your home screen or app drawer, **long-press the PixelKey app icon**.
    - Tap **App info** (the ⓘ icon).
    - Go to **Permissions** -> **Microphone**.
    - Select **"Allow only while using the app"**.
 
 2. **From Android Settings:**
    - Open your phone's **Settings** app.
-   - Navigate to **Apps** -> **Pixel Key**.
+   - Navigate to **Apps** -> **PixelKey**.
    - Tap **Permissions** -> **Microphone** -> Select **Allow**.
 
-*Note: Pixel Key processes microphone audio entirely on-device. Audio is never recorded, stored, or sent to any server.*
+*Note: PixelKey processes microphone audio entirely on-device. Audio is never recorded, stored, or sent to any server.*
 
 ## 📄 License & Legal Notice
 
-Pixel Key is released under the **Apache License 2.0**.
+PixelKey is released under the **Apache License 2.0**.
 
 ```text
 Copyright (c) 2026 Eyasin Arafat
@@ -140,4 +140,4 @@ You may obtain a copy of the License at
     http://www.apache.org/licenses/LICENSE-2.0
 ```
 
-See [LICENSE.md](LICENSE.md) and [NOTICE](NOTICE) for complete third-party licenses and credits. Pixel Key builds upon the work of the AOSP LatinIME, FUTO Keyboard, and prior community fork projects — their upstream licenses are preserved with attribution.
+See [LICENSE.md](LICENSE.md) and [NOTICE](NOTICE) for complete third-party licenses and credits. PixelKey builds upon the work of the AOSP LatinIME, FUTO Keyboard, and prior community fork projects — their upstream licenses are preserved with attribution.

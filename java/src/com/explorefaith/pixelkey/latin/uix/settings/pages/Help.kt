@@ -76,7 +76,7 @@ fun HelpScreen(navController: NavHostController = rememberNavController()) {
                 DeveloperInfo.openUrl(
                     context,
                     "${DeveloperInfo.WHATSAPP_URL}?text=" + android.net.Uri.encode(
-                        "Pixel Key bug report / feedback\n\nApp Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\nDevice: ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL} (Android ${android.os.Build.VERSION.RELEASE})\n\n"
+                        "PixelKey bug report / feedback\n\nApp Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\nDevice: ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL} (Android ${android.os.Build.VERSION.RELEASE})\n\n"
                     )
                 )
             }

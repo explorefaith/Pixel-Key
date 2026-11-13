@@ -17,9 +17,9 @@ import com.explorefaith.pixelkey.updates.openURI
 fun CreditsScreen(navController: NavHostController = rememberNavController()) {
     val context = LocalContext.current
     ScrollableList {
-        ScreenTitle("Pixel Key", showBack = true, navController)
+        ScreenTitle("PixelKey", showBack = true, navController)
 
-        ParagraphText("Pixel Key is a modern, privacy-first Android keyboard with a clean Bauhaus-inspired design language, developed and maintained by Eyasin Arafat.")
+        ParagraphText("PixelKey is a modern, privacy-first Android keyboard with a clean Bauhaus-inspired design language, developed and maintained by Eyasin Arafat.")
 
         ScreenTitle("Open Source Foundations")
 

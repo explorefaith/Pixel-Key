@@ -32,7 +32,7 @@ fun makeQwertyWithPrimary(primary: String, secondary: String): List<String> {
     return listOf(primary, secondary) + QwertyVariants.filter { it != primary && it != secondary }
 }
 
-// Pixel Key supports exactly these languages:
+// PixelKey supports exactly these languages:
 // Bangla, English, Hindi, Spanish, Chinese (Pinyin), Arabic
 val LocaleLayoutMap = mapOf(
     "ar"     to   listOf("arabic"),

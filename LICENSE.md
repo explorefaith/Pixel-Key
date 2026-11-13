@@ -18,7 +18,7 @@ limitations under the License.
 
 ### Upstream Attribution
 
-Pixel Key is a continuation of prior open-source keyboard work. In compliance
+PixelKey is a continuation of prior open-source keyboard work. In compliance
 with the Apache License, Version 2.0 (Section 4), the following upstream
 projects are credited:
 
@@ -29,7 +29,7 @@ projects are credited:
 
 ### Third-Party Licenses and Attributions
 
-Pixel Key is built upon foundational open-source technologies:
+PixelKey is built upon foundational open-source technologies:
 
 - **Whisper & GGML:** Copyright (c) 2022-2024 OpenAI & Georgi Gerganov. Licensed under the MIT License.
 - **WebRTC:** Copyright (c) 2011 The WebRTC project authors. Licensed under the BSD-3-Clause License.

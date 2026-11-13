@@ -42,7 +42,7 @@ object UpdateChecker {
                 return@withContext Result.success(rawUpdate)
             }
 
-            // 2. Fallback to GitHub Releases API with strict filtering for Pixel Key
+            // 2. Fallback to GitHub Releases API with strict filtering for PixelKey
             val releasesResult = runCatching { fetchFromReleasesApi(GITHUB_API_URL, currentVersion) }
             val releasesUpdate = releasesResult.getOrNull()
             if (releasesUpdate != null) {
@@ -53,7 +53,7 @@ object UpdateChecker {
             // If neither returned an update, report that app is on current version (up to date)
             val upToDate = AppUpdate(
                 versionName = currentVersion,
-                releaseTitle = "Pixel Key",
+                releaseTitle = "PixelKey",
                 releaseNotes = "Already on latest version.",
                 downloadUrl = "",
                 isUpdateAvailable = false
@@ -90,7 +90,7 @@ object UpdateChecker {
             } else {
                 json.optString("releaseNotes", "Bug fixes and performance improvements.")
             }
-            val title = json.optString("title", "Pixel Key v$latestVer (Stable)")
+            val title = json.optString("title", "PixelKey v$latestVer (Stable)")
             val isAvailable = isNewerVersion(remote = latestVer, current = currentVersion)
             AppUpdate(
                 versionName = latestVer,

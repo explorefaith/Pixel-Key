@@ -11,7 +11,7 @@ import com.explorefaith.pixelkey.latin.common.Constants
 object PixelThemeHelper {
     var customSpacebarColor: Int? = null
 
-    // Pixel Key matte palette (Bauhaus-inspired, softly brightened on press)
+    // PixelKey matte palette (Bauhaus-inspired, softly brightened on press)
     const val COLOR_BLACK = 0xFF000000.toInt()
     const val COLOR_DARK = 0xFF212329.toInt()      // Matte Graphite
     const val COLOR_YELLOW = 0xFFF0C24B.toInt()    // Matte Ochre
