@@ -15,6 +15,9 @@ package com.explorefaith.pixelkey.latin.chinese
 class PinyinEngine {
 
     companion object {
+        // Deterministic fallback characters for syllables missing from the char table.
+        val FALLBACK_CHARS = "的一是了我不人在他有这上们来到时大地为子中你说生国年着就那和要她出也得里后自以会家可下而过天去能对小多然于心学么之都好看起发当没成只如事把还用第样道想作种开"
+
         // Complete set of standard toneless Mandarin pinyin syllables.
         val SYLLABLES: Set<String> = (
                 "a ai an ang ao " +
@@ -161,18 +164,18 @@ class PinyinEngine {
 
         // 2. Per-syllable conversion (primary chars)
         if (syllables.isNotEmpty()) {
-            val chars = StringBuilder()
+            var chars = ""
             for (syll in syllables) {
-                val c = (SYLLABLE_CHARS[syll])?.firstOrNull()
+                val c = SYLLABLE_CHARS[syll]?.firstOrNull()
                     ?: FALLBACK_CHARS[(syll[0].code + syll.length) % FALLBACK_CHARS.length]
-                chars.append(c)
+                chars += c
             }
-            out.add(if (tail.isEmpty()) chars.toString() else chars.toString() + tail)
+            out.add(chars + tail)
 
             // 3. Alternates: vary the last syllable's character
             val last = syllables.last()
             val alts = SYLLABLE_CHARS[last] ?: ""
-            val head = chars.dropLast(1)
+            val head = if (chars.isEmpty()) "" else chars.substring(0, chars.length - 1)
             for (c in alts.drop(1)) {
                 out.add(head + c + tail)
             }

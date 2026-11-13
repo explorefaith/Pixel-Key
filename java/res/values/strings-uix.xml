@@ -24,9 +24,9 @@
 
     <string name="amoled_dark_theme_name">AMOLED Dark Purple</string>
     <string name="theme_pixel">Pixel Theme</string>
-    <string name="amoled_nothing_theme_name">Nothing</string>
-    <string name="nothing_light_theme_name">Nothing Light</string>
-    <string name="nothing_dark_theme_name">Nothing Dark</string>
+    <string name="theme_onyx">AMOLED Onyx</string>
+    <string name="theme_porcelain_light">Porcelain</string>
+    <string name="theme_ink_dark">Ink</string>
     <string name="classic_material_dark_theme_name">AOSP Material Dark</string>
     <string name="classic_material_light_theme_name">AOSP Material Light</string>
     <string name="voice_input_theme_name">Nothing Theme</string>
@@ -42,7 +42,7 @@
     <string name="sunflower_theme_name">Sunflower</string>
     <string name="cotton_candy_theme_name">Cotton Candy</string>
 
-    <string name="dynamic_nothing_theme_name">Dynamic Nothing</string>
+    <string name="theme_dynamic_pixel">Dynamic</string>
     <string name="dynamic_system_theme_name">Dynamic Auto</string>
     <string name="dynamic_light_theme_name">Dynamic Light</string>
     <string name="dynamic_dark_theme_name">Dynamic Dark</string>
