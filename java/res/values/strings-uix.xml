@@ -119,4 +119,6 @@
     <string name="uix_delete_language">Delete language</string>
     <string name="uix_revert_to_default">Revert to Default</string>
     <string name="uix_remove">Remove</string>
+    <string name="uix_hide_suggestions">Hide suggestions for this app</string>
+    <string name="uix_show_suggestions">Show suggestions for this app</string>
 </resources>

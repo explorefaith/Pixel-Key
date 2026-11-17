@@ -82,6 +82,7 @@ import com.explorefaith.pixelkey.latin.uix.actions.AllActions
 import com.explorefaith.pixelkey.latin.uix.actions.EmojiAction
 import com.explorefaith.pixelkey.latin.uix.settings.DataStoreCacheProvider
 import com.explorefaith.pixelkey.latin.uix.settings.SettingsActivity
+import com.explorefaith.pixelkey.latin.utils.SuggestionDismissals
 import com.explorefaith.pixelkey.latin.uix.settings.pages.ActionBarDisplayedSetting
 import com.explorefaith.pixelkey.latin.uix.settings.useDataStore
 import com.explorefaith.pixelkey.latin.uix.ONE_HANDED_MODE
@@ -153,6 +154,8 @@ private class LatinIMEActionInputTransaction(
 }
 
 class UixActionKeyboardManager(val uixManager: UixManager, val latinIME: LatinIME) : KeyboardManagerForAction {
+
+    fun isCurrentFieldSensitive(): Boolean = latinIME.latinIMELegacy.isCurrentFieldPassword()
     override fun getContext(): Context {
         return latinIME
     }
@@ -313,6 +316,11 @@ class UixManager(private val latinIME: LatinIME) {
     private var shouldShowSuggestionStrip: Boolean = true
     private var suggestedWords: SuggestedWords? = null
 
+    // Per-app suggestions dismissal (BUG-2): the user's "hide suggestions" choice for the
+    // current app persists across sessions; the bar stays dismissed until re-enabled.
+    private var suggestionsHiddenForApp: Boolean = false
+    private var suggestionTargetApp: String? = null
+
     private var composeView: ComposeView? = null
 
     private var currWindowAction: Action? = null
@@ -328,6 +336,29 @@ class UixManager(private val latinIME: LatinIME) {
 
     // Assistant transient message (shown via FakeToast)
     val assistantMessage: MutableState<String?> = mutableStateOf(null)
+
+    // Fresh-copy clipboard chip (BUG-3): shown once per copy, auto-dismisses after 2 min.
+    val clipboardChip: MutableState<String?> = mutableStateOf(null)
+    private var clipboardChipJob: kotlinx.coroutines.Job? = null
+
+    fun showClipboardChip(text: String) {
+        clipboardChipJob?.cancel()
+        clipboardChip.value = text
+        clipboardChipJob = latinIME.lifecycleScope.launch {
+            kotlinx.coroutines.delay(120_000L)
+            clipboardChip.value = null
+        }
+    }
+
+    fun dismissClipboardChip() {
+        clipboardChipJob?.cancel()
+        clipboardChip.value = null
+    }
+
+    fun pasteClipboardChip(text: String) {
+        keyboardManagerForAction.typeText(text)
+        dismissClipboardChip()
+    }
 
     fun showAssistantMessage(msg: String?) {
         assistantMessage.value = msg
@@ -383,8 +414,9 @@ class UixManager(private val latinIME: LatinIME) {
         val actionBarShown = useDataStore(ActionBarDisplayedSetting)
 
         Column {
-            // Don't show suggested words when it's not meant to be shown
-            val suggestedWordsOrNull = if(shouldShowSuggestionStrip) {
+            // Don't show suggested words when it's not meant to be shown, or when the
+            // user dismissed suggestions for this app (persisted, BUG-2).
+            val suggestedWordsOrNull = if(shouldShowSuggestionStrip && !suggestionsHiddenForApp) {
                 suggestedWords
             } else {
                 null
@@ -392,8 +424,13 @@ class UixManager(private val latinIME: LatinIME) {
 
             if(actionBarShown.value) {
                 ActionBar(
-                    suggestedWordsOrNull,
+                    displayableSuggestions(suggestedWordsOrNull),
                     latinIME.latinIMELegacy as SuggestionStripView.Listener,
+                    suggestionsHiddenForApp = suggestionsHiddenForApp,
+                    onToggleSuggestionsForApp = { toggleSuggestionsForApp() },
+                    clipboardChipText = clipboardChip.value,
+                    onChipPaste = { pasteClipboardChip(it) },
+                    onChipDismiss = { dismissClipboardChip() },
                     inlineSuggestions = inlineSuggestions,
                     onActionActivated = {
                         keyboardManagerForAction.performHapticAndAudioFeedback(
@@ -501,7 +538,7 @@ class UixManager(private val latinIME: LatinIME) {
             }
 
             if(!mainKeyboardHidden && !latinIME.isInputConnectionOverridden) {
-                val suggestedWordsOrNull = if (shouldShowSuggestionStrip) {
+                val suggestedWordsOrNull = if (shouldShowSuggestionStrip && !suggestionsHiddenForApp) {
                     suggestedWords
                 } else {
                     null
@@ -791,8 +828,34 @@ class UixManager(private val latinIME: LatinIME) {
 
 
     fun updateVisibility(shouldShowSuggestionsStrip: Boolean, fullscreenMode: Boolean) {
+        val targetApp = latinIME.latinIMELegacy.getCurrentTargetAppPackage()
+        suggestionTargetApp = targetApp
+        suggestionsHiddenForApp = SuggestionDismissals.isDisabled(
+            PreferenceUtils.getDefaultSharedPreferences(latinIME), targetApp)
         this.shouldShowSuggestionStrip = shouldShowSuggestionsStrip
         setContent()
+    }
+
+    /** Toggle the per-app "hide suggestions" choice; persists immediately. */
+    fun toggleSuggestionsForApp() {
+        val targetApp = suggestionTargetApp ?: return
+        val prefs = PreferenceUtils.getDefaultSharedPreferences(latinIME)
+        val nowDisabled = !SuggestionDismissals.isDisabled(prefs, targetApp)
+        SuggestionDismissals.setDisabled(prefs, targetApp, nowDisabled)
+        suggestionsHiddenForApp = nowDisabled
+        setContent()
+        // Refresh the word candidates so the change is visible right away.
+        latinIME.latinIMELegacy.mHandler.postUpdateSuggestionStrip(SuggestedWords.INPUT_STYLE_TYPING)
+    }
+
+    /**
+     * Confidence gate: when the engine produced nothing beyond the raw typed word, show
+     * no word candidates rather than a single low-value entry.
+     */
+    private fun displayableSuggestions(words: SuggestedWords?): SuggestedWords? {
+        if (words == null) return null
+        if (words.size() <= 1 && !words.isPunctuationSuggestions()) return null
+        return words
     }
 
     fun setSuggestions(suggestedWords: SuggestedWords?, rtlSubtype: Boolean) {

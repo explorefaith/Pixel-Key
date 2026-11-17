@@ -1700,6 +1700,16 @@ public class LatinIMELegacy implements KeyboardActionListener,
         return null != mSuggestionStripController;
     }
 
+    /** @return the package name of the app that owns the currently focused field. */
+    public String getCurrentTargetAppPackage() {
+        return mSettings.getCurrent().mInputAttributes.mTargetApplicationPackageName;
+    }
+
+    /** @return true when the currently focused field is a password field. */
+    public boolean isCurrentFieldPassword() {
+        return mSettings.getCurrent().mInputAttributes.mIsPasswordField;
+    }
+
     private void setSuggestedWords(final SuggestedWords suggestedWords) {
         final SettingsValues currentSettingsValues = mSettings.getCurrent();
         mInputLogic.setSuggestedWords(suggestedWords);

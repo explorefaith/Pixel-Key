@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,10 +24,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
@@ -35,6 +38,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.contentColorFor
@@ -662,6 +666,11 @@ fun ActionBar(
     toggleActionsExpanded: () -> Unit,
     importantNotice: ImportantNotice? = null,
     keyboardManagerForAction: KeyboardManagerForAction? = null,
+    suggestionsHiddenForApp: Boolean = false,
+    onToggleSuggestionsForApp: () -> Unit = {},
+    clipboardChipText: String? = null,
+    onChipPaste: (String) -> Unit = {},
+    onChipDismiss: () -> Unit = {},
 ) {
     val view = LocalView.current
     val context = LocalContext.current
@@ -684,6 +693,41 @@ fun ActionBar(
                         Constants.CODE_TAB,
                         view
                     )
+                }
+
+                // Fresh-copy clipboard chip (BUG-3): appears once per copy, pastes on tap,
+                // auto-dismisses after 2 minutes or when the user dismisses it.
+                if (clipboardChipText != null) {
+                    Surface(
+                        shape = RoundedCornerShape(18.dp),
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
+                        modifier = Modifier.padding(start = 4.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .widthIn(max = 170.dp)
+                                .clickable { onChipPaste(clipboardChipText) }
+                        ) {
+                            Text(
+                                clipboardChipText.take(28),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                style = Typography.bodySmall,
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+                            IconButton(
+                                onClick = onChipDismiss,
+                                modifier = Modifier.size(28.dp)
+                            ) {
+                                Icon(
+                                    painterResource(id = R.drawable.close),
+                                    contentDescription = "Dismiss clipboard chip",
+                                    modifier = Modifier.size(14.dp)
+                                )
+                            }
+                        }
+                    }
                 }
 
                 if (importantNotice != null) {
@@ -718,6 +762,28 @@ fun ActionBar(
                             })
                     } else {
                         Spacer(modifier = Modifier.weight(1.0f))
+                    }
+
+                    // Per-app suggestions dismiss (BUG-2): tapping X hides word candidates
+                    // for the current app and stays dismissed until tapped again.
+                    IconButton(
+                        onClick = onToggleSuggestionsForApp,
+                        modifier = Modifier
+                            .width(34.dp)
+                            .fillMaxHeight(),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(
+                                id = if (suggestionsHiddenForApp) R.drawable.arrow_up else R.drawable.close
+                            ),
+                            contentDescription = stringResource(
+                                if (suggestionsHiddenForApp) R.string.uix_show_suggestions
+                                else R.string.uix_hide_suggestions
+                            )
+                        )
                     }
 
                     PinnedActionItems(onActionActivated, onActionAltActivated)

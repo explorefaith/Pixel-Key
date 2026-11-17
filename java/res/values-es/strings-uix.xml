@@ -11,4 +11,6 @@
     <string name="uix_delete_language">Eliminar idioma</string>
     <string name="uix_revert_to_default">Restablecer valores</string>
     <string name="uix_remove">Quitar</string>
+    <string name="uix_hide_suggestions">Ocultar sugerencias en esta app</string>
+    <string name="uix_show_suggestions">Mostrar sugerencias en esta app</string>
 </resources>
