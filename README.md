@@ -34,7 +34,11 @@ Typing never touches the internet. Zero cloud logging. Zero tracking. Just pure,
 
 ### ⚡ 5. Power Features
 - **Haptic Engine**: Crisp, tactile vibration feedback
-- **Clipboard Management**: Quick clipboard history with pinned items
+- **Clipboard Management**: Pinned clipboard history with dedup, auto-clear of unpinned items after 1 hour, sensitive-clip protection, and a paste chip that appears right after you copy
+- **Text Shortcuts**: Save snippets like `/mail` → your full email; type the shortcut, press space, done
+- **Incognito Mode**: No word learning and no clipboard history while enabled
+- **Smart Suggestions**: Per-app dismiss (stays dismissed), no candidates on password/number/email/URL fields, and nothing shown when the model is not confident
+- **Grapheme-Aware Backspace**: Bangla conjuncts (ক্ষ), emoji ZWJ sequences and surrogate pairs delete as one unit
 - **Customizable Dimensions**: Adjustable keyboard height, one-handed mode, and split tablet layouts
 - **Gesture Typing**: Smooth glide trace input with real-time word formulation
 - **Voice Typing**: Fully on-device speech recognition (optional microphone permission)
