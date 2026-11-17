@@ -44,6 +44,23 @@ fun PredictiveTextScreen(navController: NavHostController = rememberNavControlle
             }
         )
 
+        NavigationItem(
+            title = "Text Shortcuts",
+            subtitle = "Expand words like /mail into full text",
+            style = NavigationItemStyle.HomeSecondary,
+            icon = painterResource(id = R.drawable.file_text),
+            navigate = {
+                navController.navigate("snippets")
+            }
+        )
+
+        SettingToggleSharedPrefs(
+            title = "Incognito mode",
+            subtitle = "No word learning and no clipboard history while typing.",
+            key = Settings.PREF_INCOGNITO_MODE,
+            default = false
+        )
+
         SettingToggleSharedPrefs(
             title = stringResource(R.string.auto_correction),
             subtitle = stringResource(R.string.auto_correction_summary),

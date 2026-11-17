@@ -19,6 +19,7 @@ import com.explorefaith.pixelkey.latin.uix.settings.pages.HelpScreen
 import com.explorefaith.pixelkey.latin.uix.settings.pages.HomeScreen
 import com.explorefaith.pixelkey.latin.uix.settings.pages.LanguagesScreen
 import com.explorefaith.pixelkey.latin.uix.settings.pages.PredictiveTextScreen
+import com.explorefaith.pixelkey.latin.uix.settings.pages.SnippetsScreen
 import com.explorefaith.pixelkey.latin.uix.settings.pages.ThemeScreen
 import com.explorefaith.pixelkey.latin.uix.settings.pages.addTypingNavigation
 import com.explorefaith.pixelkey.latin.uix.urlDecode
@@ -55,6 +56,7 @@ fun SettingsNavigator(
         composable("developer") { DeveloperScreen(navController) }
         composable("devtextedit") { DevEditTextVariationsScreen(navController) }
         composable("blacklist") { BlacklistScreen(navController) }
+        composable("snippets") { SnippetsScreen(navController) }
 
         dialog("error/{title}/{body}") {
             ErrorDialog(
