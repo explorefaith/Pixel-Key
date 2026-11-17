@@ -59,8 +59,10 @@ import com.explorefaith.pixelkey.latin.settings.SettingsValuesForSuggestion;
 import com.explorefaith.pixelkey.latin.settings.SpacingAndPunctuations;
 import com.explorefaith.pixelkey.latin.suggestions.SuggestionStripViewAccessor;
 import com.explorefaith.pixelkey.latin.utils.AsyncResultHolder;
+import com.explorefaith.pixelkey.latin.utils.GraphemeUtils;
 import com.explorefaith.pixelkey.latin.utils.InputTypeUtils;
 import com.explorefaith.pixelkey.latin.utils.RecapitalizeStatus;
+import com.explorefaith.pixelkey.latin.utils.SnippetUtils;
 import com.explorefaith.pixelkey.latin.utils.StatsUtils;
 import com.explorefaith.pixelkey.latin.utils.TextRange;
 import com.explorefaith.pixelkey.latin.xlm.LanguageModelFacilitator;
@@ -507,15 +509,50 @@ public final class InputLogic {
             insertAutomaticSpaceIfOptionsAndTextAllow(settingsValues);
         }
         mConnection.commitText(text, 1);
+        // Guarantee no composing region remains after a multi-char insertion (paste,
+        // clipboard items, emoji); committed text must never sit in a composing span.
+        mConnection.finishComposingText();
         StatsUtils.onWordCommitUserTyped(mEnteredText, mWordComposer.isBatchMode());
         mConnection.endBatchEdit();
         // Space state must be updated before calling updateShiftState
         mSpaceState = SpaceState.NONE;
-        mEnteredText = text;
+        mEnteredText = null;
+        // Arm the AOSP multi-char-input revert only for small, single-token insertions
+        // (the .com key, one emoji). Paste-sized text must never be revertible as a whole:
+        // backspace after a paste deletes exactly one grapheme at a time instead.
+        final boolean isSingleToken = !containsWhitespace(text)
+                && (GraphemeUtils.countGraphemeClusters(text) == 1 || text.length() <= 5);
+        if (isSingleToken) {
+            mEnteredText = text;
+        }
         mWordBeingCorrectedByCursor = null;
         inputTransaction.setDidAffectContents();
         inputTransaction.requireShiftUpdate(InputTransaction.SHIFT_UPDATE_NOW);
         return inputTransaction;
+    }
+
+    /**
+     * @return the length in Java chars of the last grapheme cluster before the cursor,
+     * or 1 if the text before the cursor cannot be read.
+     */
+    private int getLastGraphemeClusterLength() {
+        final CharSequence beforeCursor = mConnection.getTextBeforeCursor(100, 0);
+        if (TextUtils.isEmpty(beforeCursor)) {
+            return 1;
+        }
+        final int length = GraphemeUtils.lastGraphemeClusterLength(beforeCursor);
+        return length > 0 ? length : 1;
+    }
+
+    private static boolean containsWhitespace(final String text) {
+        for (int i = 0; i < text.length(); ) {
+            final int codePoint = text.codePointAt(i);
+            if (Character.isWhitespace(codePoint)) {
+                return true;
+            }
+            i += Character.charCount(codePoint);
+        }
+        return false;
     }
 
     /**
@@ -1221,7 +1258,25 @@ public final class InputLogic {
         }
         // isComposingWord() may have changed since we stored wasComposing
         if (mWordComposer.isComposingWord()) {
-            if (isAvroActive() || isPinyinActive()) {
+            // Text snippets (STEP 3 #5): typing a token like "/mail" and then any
+            // separator replaces the composing word with the configured expansion, then
+            // the separator is inserted after it as usual. "/" may itself be a separator,
+            // so match the bare token as well as its "/token" form.
+            String snippetExpansion = SnippetUtils.findExpansion(
+                    settingsValues.mSnippetsJson, mWordComposer.getTypedWord());
+            if (snippetExpansion == null) {
+                snippetExpansion = SnippetUtils.findExpansion(
+                        settingsValues.mSnippetsJson, "/" + mWordComposer.getTypedWord());
+            }
+            if (snippetExpansion != null) {
+                // The composing region holds exactly the typed word (raw or converted),
+                // so setting the composing text replaces it wholesale.
+                mConnection.setComposingText(snippetExpansion, 1);
+                mConnection.finishComposingText();
+                mWordComposer.reset();
+                mEnteredText = null;
+                mLastComposedWord.deactivate();
+            } else if (isAvroActive() || isPinyinActive()) {
                 final String typedWord = mWordComposer.getTypedWord();
                 final String bangla = phoneticConvert(typedWord);
                 commitChosenWord(settingsValues, bangla,
@@ -1448,10 +1503,11 @@ public final class InputLogic {
                 }
             }
 
-            // Phonetic engines delete exactly one character per backspace so a single
-            // key press never erases the whole converted word.
+            // Phonetic engines delete exactly one user-perceived character (grapheme
+            // cluster: a Bangla conjunct like ক্ষ, a surrogate-pair emoji) per backspace
+            // so a single key press never erases the whole converted word.
             if (phoneticEngine) {
-                mConnection.deleteTextBeforeCursor(1);
+                mConnection.deleteTextBeforeCursor(getLastGraphemeClusterLength());
                 mLastComposedWord.deactivate();
                 inputTransaction.setRequiresUpdateSuggestions();
                 return;
@@ -1838,6 +1894,8 @@ public final class InputLogic {
         // That's to avoid unintended additions in some sensitive fields, or fields that
         // expect to receive non-words.
         if (!settingsValues.mAutoCorrectionEnabledPerUserSettings) return;
+        // No learning in incognito mode (STEP 3 #6) or in fields that asked for it.
+        if (settingsValues.mIncognitoMode) return;
         if (settingsValues.mInputAttributes.mNoLearning) return;
 
         if (mConnection.hasSlowInputConnection()) {

@@ -111,6 +111,10 @@ public class SettingsValues {
     public final float mPlausibilityThreshold;
     public final boolean mAutoCorrectionEnabledPerUserSettings;
     private final boolean mSuggestionsEnabledPerUserSettings;
+    // Incognito mode: no word learning and no clipboard capture while active.
+    public final boolean mIncognitoMode;
+    // JSON object {"shortcut": "expansion"} powering text snippets (/mail -> full email).
+    public final String mSnippetsJson;
     private final AsyncResultHolder<AppWorkaroundsUtils> mAppWorkarounds;
 
     // Debug settings
@@ -199,6 +203,8 @@ public class SettingsValues {
         mAutoCorrectionEnabledPerUserSettings = mAutoCorrectEnabled
                 && !mInputAttributes.mInputTypeNoAutoCorrect;
         mSuggestionsEnabledPerUserSettings = readSuggestionsEnabled(prefs);
+        mIncognitoMode = prefs.getBoolean(Settings.PREF_INCOGNITO_MODE, false);
+        mSnippetsJson = prefs.getString(Settings.PREF_TEXT_SNIPPETS, "{}");
         mIsInternal = Settings.isInternal(prefs);
         mHasCustomKeyPreviewAnimationParams = prefs.getBoolean(
                 DebugSettings.PREF_HAS_CUSTOM_KEY_PREVIEW_ANIMATION_PARAMS, false);
