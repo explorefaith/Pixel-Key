@@ -208,4 +208,8 @@
     <string name="user_dict_settings_more_languages" msgid="4436784162689712198">"Más idiomas…"</string>
     <string name="user_dict_settings_delete" msgid="7688033506773806537">"Eliminar"</string>
     <string name="user_dict_fast_scroll_alphabet" msgid="6814045626833403178">" ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"</string>
+    <!-- Layout display names (PixelKey) -->
+    <string name="layout_arabic">"Árabe"</string>
+    <string name="layout_hindi_compact">"Hindi (compacto)"</string>
+    <string name="layout_pinyin">"Chino Pinyin"</string>
 </resources>

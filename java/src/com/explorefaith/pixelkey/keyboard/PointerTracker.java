@@ -726,6 +726,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             mStartY = y;
             mStartTime = System.currentTimeMillis();
             mSpacebarLongPressed = false;
+            mCursorMoved = false;
 
             mIsSlidingCursor = key.getCode() == Constants.CODE_DELETE || key.getCode() == Constants.CODE_SPACE;
             mCurrentKey = key;
@@ -1140,7 +1141,10 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         }
         if (mKeyboard.mId.mSubtype != null) {
             final String layoutName = mKeyboard.mId.mSubtype.getKeyboardLayoutSetName();
-            if ("bengali_avro".equalsIgnoreCase(layoutName)) {
+            if ("bengali_avro".equalsIgnoreCase(layoutName)
+                    // ISSUE-002: clipboard shortcuts also work on Probhat and Jatiyo
+                    || "bengali_probhat".equalsIgnoreCase(layoutName)
+                    || "bengali_jatiyo".equalsIgnoreCase(layoutName)) {
                 return true;
             }
         }
@@ -1244,6 +1248,13 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             mMoreKeysPanel = moreKeysPanel;
         } catch (final Throwable t) {
             Log.e(TAG, "Exception during onLongPressed", t);
+            try {
+                // Release the pressed-key graphics so the key does not stay stuck, and stop
+                // tracking so the subsequent touch-up is not dispatched with broken state.
+                cancelKeyTracking();
+            } catch (final Throwable cleanup) {
+                Log.e(TAG, "Failed to clean up after onLongPressed failure", cleanup);
+            }
         }
     }
 
@@ -1271,6 +1282,9 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         sTimerProxy.cancelKeyTimersOf(this);
         setReleasedKeyGraphics(mCurrentKey, true /* withAnimation */);
         resetKeySelectionByDraggingFinger();
+        // A cancelled touch must not leave stale cursor-tracking state behind, otherwise the
+        // next tap would fire spurious delete/selection callbacks and swallow the keystroke.
+        mCursorMoved = false;
         dismissMoreKeysPanel();
     }
 

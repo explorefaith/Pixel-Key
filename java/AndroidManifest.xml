@@ -29,7 +29,6 @@
     <!-- Required on Android 14+ when starting a foreground service for MediaProjection -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
-    <uses-permission android:name="com.nothing.ketchum.permission.ENABLE"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application android:label="@string/english_ime_name"
@@ -51,7 +50,6 @@
             </intent-filter>
             <meta-data android:name="android.view.im"
                  android:resource="@xml/method"/>
-            <meta-data android:name="NothingKey" android:value="test"/>
         </service>
 
         <!--

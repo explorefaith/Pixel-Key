@@ -249,7 +249,11 @@ fun RowScope.SuggestionItem(words: SuggestedWords, idx: Int, isPrimary: Boolean,
 
     val (keyboardFont, _) = useDataStore(key = KeyboardFontSetting.key, default = KeyboardFontSetting.default)
     val containsIndic = word?.any { it.code in 0x0980..0x09FF } == true
-    val font = if (keyboardFont == "normal" || containsIndic) FontFamily.Default else FontFamily(Font(R.font.space_grotesk))
+    val font = when {
+        containsIndic || keyboardFont == "normal" -> FontFamily.Default
+        keyboardFont == "pixel" -> FontFamily(Font(R.font.pixelify))
+        else -> FontFamily(Font(R.font.space_grotesk))
+    }
     val textStyle = when (actualIsPrimary) {
         true -> suggestionStylePrimary
         false -> suggestionStyleAlternative

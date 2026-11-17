@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PixelKey — a private keyboard for six languages</title>
-<meta name="description" content="PixelKey is a free, open-source Android keyboard. Bangla, English, Hindi, Spanish, Chinese and Arabic — with predictions, voice typing, and no internet permission.">
+<meta name="description" content="PixelKey is a free, open-source Android keyboard. Bangla, English, Hindi, Spanish, Chinese and Arabic — with predictions, voice typing, and fully offline typing.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -208,10 +208,10 @@ footer a{color:inherit}
   <!-- hero -->
   <section class="hero">
     <div class="wrap">
-      <h1>Type in six languages. Online in&nbsp;none.</h1>
+      <h1>Type in six languages. Offline&nbsp;by&nbsp;design.</h1>
       <p>PixelKey is a free, open-source Android keyboard. Bangla, English, Hindi, Spanish, Chinese and Arabic — with suggestions, autocorrect and voice typing, all processed on your phone.</p>
       <div class="cta">
-        <a class="btn btn-primary" href="https://github.com/explorefaith/Pixel-Key/releases/download/v1.0.0/PixelKey-stable-arm64-v8a-release.apk" target="_blank" rel="noopener">Download APK</a>
+        <a class="btn btn-primary" href="https://github.com/explorefaith/Pixel-Key/releases/download/v1.1.0/PixelKey-stable-arm64-v8a-release.apk" target="_blank" rel="noopener">Download APK</a>
         <a class="btn btn-ghost" href="https://github.com/explorefaith/Pixel-Key" target="_blank" rel="noopener">Source on GitHub</a>
       </div>
       <p class="trust">Free and open source under Apache-2.0. Runs on Android 7.0 and up, and no account is needed.</p>
@@ -250,7 +250,7 @@ footer a{color:inherit}
         <div class="f-7 f-big">
           <span class="ftag">Privacy</span>
           <h3>Your words never leave the phone</h3>
-          <p>The typing app has no internet permission at all. Passwords, messages and personal dictionaries stay in local storage — there is no cloud to send them to.</p>
+          <p>Typing, prediction and dictionary lookups all run entirely on-device. Passwords, messages and personal dictionaries stay in local storage — there is no cloud to send them to.</p>
         </div>
         <div class="f-5 f-big">
           <span class="ftag">Suggestions</span>
@@ -330,12 +330,12 @@ footer a{color:inherit}
       <div class="privacy">
         <div>
           <h2>Check the manifest, not the marketing</h2>
-          <p>Privacy claims are easy to make. This one is a fact about the app file itself — the keyboard does not ask the Android system for network access, so it physically cannot phone home while you type.</p>
+          <p>Privacy claims are easy to make. Here is a fact about the app file itself: typing never touches the network — every keystroke, prediction and dictionary lookup is processed on your phone. The INTERNET permission exists only for the optional in-app update check and is never used while you type.</p>
         </div>
         <div class="perm" aria-label="Requested permissions">
           <div><span class="ok">✓</span> android.permission.VIBRATE</div>
           <div><span class="ok">✓</span> android.permission.RECORD_AUDIO <span style="color:#8E90A0">(voice typing only)</span></div>
-          <div><span class="no">✗</span> android.permission.INTERNET</div>
+          <div><span class="ok">✓</span> android.permission.INTERNET <span style="color:#8E90A0">(update check only — typing never uses it)</span></div>
         </div>
       </div>
     </div>
@@ -356,9 +356,9 @@ footer a{color:inherit}
         </div>
         <div class="dlbox">
           <h3>Latest release</h3>
-          <p class="ver">v1.0.0 · signed · Apache-2.0</p>
+          <p class="ver">v1.1.0 · signed · Apache-2.0</p>
           <div class="cta" style="justify-content:flex-start;margin-top:0">
-            <a class="btn btn-primary" href="https://github.com/explorefaith/Pixel-Key/releases/download/v1.0.0/PixelKey-stable-arm64-v8a-release.apk" target="_blank" rel="noopener">Download APK</a>
+            <a class="btn btn-primary" href="https://github.com/explorefaith/Pixel-Key/releases/download/v1.1.0/PixelKey-stable-arm64-v8a-release.apk" target="_blank" rel="noopener">Download APK</a>
           </div>
           <p style="margin-top:16px;font-size:13.5px;color:var(--slate)">All release builds and version history live on the GitHub releases page.</p>
         </div>

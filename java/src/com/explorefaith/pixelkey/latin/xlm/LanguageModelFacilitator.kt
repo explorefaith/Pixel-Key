@@ -498,6 +498,7 @@ public class LanguageModelFacilitator(
 
     public fun shouldPassThroughToLegacy(): Boolean =
         inputLogic.isAvroActive() ||
+        inputLogic.isPinyinActive() || // keep the Pinyin candidate bar in charge of suggestions
         (!settings.current.mTransformerPredictionEnabled) ||
                 (languageModel?.let {
                     it.locale.language != dictionaryFacilitator.locale.language

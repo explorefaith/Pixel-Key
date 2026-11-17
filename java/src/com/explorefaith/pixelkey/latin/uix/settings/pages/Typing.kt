@@ -469,8 +469,8 @@ fun TypingScreen(navController: NavHostController = rememberNavController()) {
 
         SettingRadio(
             title = "Keyboard Font Style",
-            options = listOf("pixel", "normal"),
-            optionNames = listOf("Pixel Dot Font", "Normal System Font"),
+            options = listOf("pixel", "grotesk", "normal"),
+            optionNames = listOf("Pixel (Pixelify)", "Space Grotesk", "System Font"),
             setting = useDataStore(
                 key = KeyboardFontSetting.key,
                 default = KeyboardFontSetting.default

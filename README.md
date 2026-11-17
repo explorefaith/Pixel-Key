@@ -2,7 +2,7 @@
 
 **PixelKey** is a modern, high-performance, privacy-first Android virtual keyboard crafted with a clean Bauhaus-inspired design language. Designed for people who value minimalism, tactile beauty, and absolute privacy, PixelKey combines an elegant matte palette, refined typography, dynamic per-key accent popups, and an advanced multilingual typing suite.
 
-Zero internet permissions for core typing. Zero cloud logging. Zero tracking. Just pure, elevated typing.
+Typing never touches the internet. Zero cloud logging. Zero tracking. Just pure, elevated typing.
 
 ---
 
@@ -28,7 +28,7 @@ Zero internet permissions for core typing. Zero cloud logging. Zero tracking. Ju
 - **Page 3 (Extended Symbols & Math)**: Advanced math symbols, brackets, and typography
 
 ### 🔒 4. Offline & Private
-- **No Internet Permission for typing**: The app manifest strictly requests `android.permission.VIBRATE` and microphone access for voice input
+- **No network use for typing**: Typing, prediction and dictionary lookups are fully on-device. The manifest requests `INTERNET` only for the optional update check; it is never used while you type
 - **On-Device Only**: Your passwords, messages, bank details, and personal dictionaries never leave your local storage
 - **No Telemetry**: No trackers, no analytics SDKs
 
@@ -56,11 +56,11 @@ Zero internet permissions for core typing. Zero cloud logging. Zero tracking. Ju
 
 ## 🛠️ Tech Stack & Architecture
 
-- **Operating System:** Android 7.0 (Nougat, API 24) through Android 15 (API 35)
+- **Operating System:** Android 7.0 (Nougat, API 24) through Android 15 (targets API 34)
 - **Architecture:** Android Open Source Project (AOSP) LatinIME foundation with modern Jetpack Compose UIX
 - **Native Core:** C++ JNI Native Input Engine (`libjni_latinime.so`, pocketfft, ggml)
 - **Languages:** Java, Kotlin, C++
-- **Build System:** Gradle 8.2 & Android Gradle Plugin 8.3
+- **Build System:** Gradle 8.2 & Android Gradle Plugin 8.2
 
 ---
 

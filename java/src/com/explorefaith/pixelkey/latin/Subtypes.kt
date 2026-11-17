@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import okhttp3.internal.toImmutableList
+import androidx.compose.ui.res.stringResource
 import com.explorefaith.pixelkey.latin.common.Constants
 import com.explorefaith.pixelkey.latin.uix.SettingsKey
 import com.explorefaith.pixelkey.latin.uix.getSettingBlocking
@@ -375,7 +376,7 @@ fun LanguageSwitcherDialog(
         Column {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                "Select language",
+                stringResource(R.string.uix_select_language),
                 textAlign = TextAlign.Center,
                 style = Typography.titleLarge,
                 modifier = Modifier

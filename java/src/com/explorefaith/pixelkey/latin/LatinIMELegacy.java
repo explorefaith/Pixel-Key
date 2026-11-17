@@ -1364,9 +1364,34 @@ public class LatinIMELegacy implements KeyboardActionListener,
                 final CharSequence before = ic.getTextBeforeCursor(100000, 0);
                 final CharSequence after = ic.getTextAfterCursor(100000, 0);
 
+                if (selected != null && selected.length() > 0) {
+                    // Cut only the selected text; the rest of the buffer must stay untouched.
+                    if (cm != null) {
+                        cm.setPrimaryClip(android.content.ClipData.newPlainText("PixelKey Clipboard", selected));
+                    }
+                    ic.commitText("", 1);
+                    ic.endBatchEdit();
+
+                    if (mInputLogic != null) {
+                        mInputLogic.finishInput();
+                        if (mInputLogic.mConnection != null) {
+                            // Cursor now sits where the selection started.
+                            mInputLogic.mConnection.resetCachesUponCursorMoveAndReturnSuccess(
+                                    before != null ? before.length() : 0,
+                                    before != null ? before.length() : 0,
+                                    false);
+                        }
+                    }
+                    android.widget.Toast.makeText(mInputMethodService, "Cut", android.widget.Toast.LENGTH_SHORT).show();
+                    AudioAndHapticFeedbackManager.getInstance().performHapticFeedback(
+                            mKeyboardSwitcher.getMainKeyboardView(), false);
+                    AudioAndHapticFeedbackManager.getInstance().performAudioFeedback(Constants.CODE_UNSPECIFIED);
+                    return;
+                }
+
+                // No selection: fall back to cutting the whole editable buffer.
                 final StringBuilder sb = new StringBuilder();
                 if (before != null) sb.append(before);
-                if (selected != null) sb.append(selected);
                 if (after != null) sb.append(after);
                 final String full = sb.toString();
 
@@ -1374,13 +1399,9 @@ public class LatinIMELegacy implements KeyboardActionListener,
                     if (cm != null) {
                         cm.setPrimaryClip(android.content.ClipData.newPlainText("PixelKey Clipboard", full));
                     }
-                    if (selected != null && selected.length() > 0) {
-                        ic.commitText("", 1);
-                    }
                     ic.deleteSurroundingText(
                             before != null ? before.length() : 0,
                             after != null ? after.length() : 0);
-                    ic.finishComposingText();
                     ic.endBatchEdit();
 
                     if (mInputLogic != null) {
@@ -1933,7 +1954,7 @@ public class LatinIMELegacy implements KeyboardActionListener,
         if (!ProductionFlags.IS_HARDWARE_KEYBOARD_SUPPORTED) {
             return false;
         }
-        final long keyIdentifier = keyEvent.getDeviceId() << 32 + keyEvent.getKeyCode();
+        final long keyIdentifier = ((long) keyEvent.getDeviceId() << 32) | keyEvent.getKeyCode();
         if (mInputLogic.mCurrentlyPressedHardwareKeys.remove(keyIdentifier)) {
             return true;
         }

@@ -77,7 +77,7 @@
         latin:keyActionFlags="isRepeatable|noKeyPreview"
         latin:keyLabelFlags="disableKeyHintLabel"
         latin:backgroundType="functional" />
-    <!-- emojiKeyStyle must be defined before including @xml/key_syles_enter. -->
+    <!-- emojiKeyStyle must be defined before including @xml/key_styles_enter. -->
     <key-style
         latin:styleName="emojiKeyStyle"
         latin:keySpec="!icon/emoji_action_key|!code/key_emoji"

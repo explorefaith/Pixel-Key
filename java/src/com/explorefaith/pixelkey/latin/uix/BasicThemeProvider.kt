@@ -220,12 +220,11 @@ class BasicThemeProvider(
             else -> null
         }
         PixelThemeHelper.customSpacebarColor = customSpaceColor
-        keyboardTypeface = if (isPixelTheme) {
-            ResourcesCompat.getFont(context, R.font.space_grotesk) ?: Typeface.DEFAULT
-        } else if (keyboardFont == "normal") {
-            Typeface.DEFAULT
-        } else {
-            ResourcesCompat.getFont(context, R.font.space_grotesk)
+        keyboardTypeface = when {
+            keyboardFont == "normal" -> Typeface.DEFAULT
+            keyboardFont == "pixel" ->
+                ResourcesCompat.getFont(context, R.font.pixelify) ?: Typeface.DEFAULT
+            else -> ResourcesCompat.getFont(context, R.font.space_grotesk) ?: Typeface.DEFAULT
         }
 
         val primary = colorScheme.primary.toArgb()

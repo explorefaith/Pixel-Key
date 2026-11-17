@@ -56,6 +56,14 @@ public final class KeyboardState {
         default boolean isShowingAlphabetKeyboard() { return false; }
 
         /**
+         * Returns true when the symbol pages of the current layout latch (i.e. a space does not
+         * automatically return to the alphabet keyboard). Used by the Bengali symbol pages,
+         * which keep the user on the numbers/math page until they explicitly press the
+         * alphabet key (ISSUE-001 behavior).
+         */
+        default boolean shouldKeepSymbolsLayoutOnSpace() { return false; }
+
+        /**
          * Request to call back {@link KeyboardState#onUpdateShiftState(int, int)}.
          */
         public void requestUpdatingShiftState(final int autoCapsFlags, final int recapitalizeMode);
@@ -695,10 +703,10 @@ public final class KeyboardState {
             break;
         case SWITCH_STATE_SYMBOL:
             // Switch back to alpha keyboard mode if user types one or more non-space/enter
-            // characters followed by a space/enter on Page 1.
-            // Never prematurely revert on Page 2 (math) or Page 3 (fractions/emoticons).
+            // characters followed by a space/enter. Bengali symbol pages (numbers/math)
+            // latch instead, matching ISSUE-001: the alphabet key is the only way back.
             if (isSpaceOrEnter(code)) {
-                if (mSymbolPage == SYMBOL_PAGE_1) {
+                if (mSymbolPage == SYMBOL_PAGE_1 || !mSwitchActions.shouldKeepSymbolsLayoutOnSpace()) {
                     toggleAlphabetAndSymbols(autoCapsFlags, recapitalizeMode);
                     mPrevSymbolsKeyboardWasShifted = false;
                 }

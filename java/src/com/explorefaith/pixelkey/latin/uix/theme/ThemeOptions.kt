@@ -11,7 +11,12 @@ import com.explorefaith.pixelkey.latin.uix.theme.presets.InkDark
 import com.explorefaith.pixelkey.latin.uix.theme.presets.ClassicMaterialDark
 import com.explorefaith.pixelkey.latin.uix.theme.presets.ClassicMaterialLight
 import com.explorefaith.pixelkey.latin.uix.theme.presets.CottonCandy
+import com.explorefaith.pixelkey.latin.uix.theme.presets.AnimeNeonEdition
+import com.explorefaith.pixelkey.latin.uix.theme.presets.BmwEdition
+import com.explorefaith.pixelkey.latin.uix.theme.presets.DoraemonEdition
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DeepSeaDark
+import com.explorefaith.pixelkey.latin.uix.theme.presets.NarutoEdition
+import com.explorefaith.pixelkey.latin.uix.theme.presets.NatureEdition
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DeepSeaLight
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicDarkTheme
 import com.explorefaith.pixelkey.latin.uix.theme.presets.DynamicLightTheme
@@ -56,6 +61,11 @@ val ThemeOptions = mapOf(
     DeepSeaLight.key to DeepSeaLight,
     DeepSeaDark.key to DeepSeaDark,
 
+    NarutoEdition.key to NarutoEdition,
+    DoraemonEdition.key to DoraemonEdition,
+    AnimeNeonEdition.key to AnimeNeonEdition,
+    NatureEdition.key to NatureEdition,
+    BmwEdition.key to BmwEdition,
 )
 
 val ThemeOptionKeys = ThemeOptions.keys

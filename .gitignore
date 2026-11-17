@@ -10,3 +10,7 @@ keystore.properties
 key.jks
 
 *.apk
+# Never commit keystores or signing material
+java/shared.keystore
+*.keystore
+*.jks

@@ -11,10 +11,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.explorefaith.pixelkey.latin.R
 import com.explorefaith.pixelkey.latin.Subtypes
 import com.explorefaith.pixelkey.latin.stripExtensionsIfNeeded
 import com.explorefaith.pixelkey.latin.uix.settings.DropDownPicker
@@ -66,9 +68,9 @@ fun AddLanguageScreen(navController: NavHostController = rememberNavController()
 
     val keys = remember { LocaleLayoutMap.keys.toList() }
     ScrollableList {
-        ScreenTitle("Add Language", showBack = true, navController)
+        ScreenTitle(stringResource(R.string.uix_add_language), showBack = true, navController)
 
-        SettingItem(title = "Language") {
+        SettingItem(title = stringResource(R.string.uix_language)) {
             DropDownPicker(
                 "",
                 keys,
@@ -84,7 +86,7 @@ fun AddLanguageScreen(navController: NavHostController = rememberNavController()
             )
         }
 
-        SettingItem(title = "Layout") {
+        SettingItem(title = stringResource(R.string.uix_layout)) {
             DropDownPicker(
                 "",
                 LocaleLayoutMap[selectedLocale.value] ?: listOf(),
@@ -104,7 +106,7 @@ fun AddLanguageScreen(navController: NavHostController = rememberNavController()
 
             navController.navigateUp()
         }, modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-            Text("Add")
+            Text(stringResource(R.string.uix_add))
         }
     }
 }

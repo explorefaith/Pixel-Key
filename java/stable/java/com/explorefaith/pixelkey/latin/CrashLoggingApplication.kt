@@ -47,14 +47,16 @@ class CrashLoggingApplication : Application() {
                 //        httpMethod = HttpSender.Method.POST
                 //    }
                 //} else {
-                mailSender {
-                    mailTo = "keyboard@futo.org"
-                    reportAsFile = true
-                    reportFileName = "Crash.txt"
-                    subject = "Keyboard Crash Report"
-                    body =
-                        "I experienced this crash. My version: ${BuildConfig.VERSION_NAME}.\n\n(Enter details here if necessary)"
-                }
+                // TODO: Set mailTo to the PixelKey developer's own address before enabling
+                //  crash report emails. Crash reports must never go to a third party.
+                //mailSender {
+                //    mailTo = "your-email@example.com"
+                //    reportAsFile = true
+                //    reportFileName = "Crash.txt"
+                //    subject = "Keyboard Crash Report"
+                //    body =
+                //        "I experienced this crash. My version: ${BuildConfig.VERSION_NAME}.\n\n(Enter details here if necessary)"
+                //}
                 //}
             }
 

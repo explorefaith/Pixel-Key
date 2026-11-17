@@ -907,7 +907,7 @@ class LatinIME : InputMethodService(), LifecycleOwner, ViewModelStoreOwner, Save
     }
 
     fun postUpdateSuggestionStrip(inputStyle: Int): Boolean {
-        if (latinIMELegacy.mInputLogic.isAvroActive() || languageModelFacilitator.shouldPassThroughToLegacy()) return false
+        if (latinIMELegacy.mInputLogic.isAvroActive() || latinIMELegacy.mInputLogic.isPinyinActive() || languageModelFacilitator.shouldPassThroughToLegacy()) return false
 
         languageModelFacilitator.updateSuggestionStripAsync(inputStyle);
         return true

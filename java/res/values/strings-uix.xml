@@ -43,6 +43,11 @@
     <string name="cotton_candy_theme_name">Cotton Candy</string>
 
     <string name="theme_dynamic_pixel">Dynamic</string>
+    <string name="theme_naruto">Naruto</string>
+    <string name="theme_doraemon">Doraemon</string>
+    <string name="theme_anime">Anime Neon</string>
+    <string name="theme_nature">Nature</string>
+    <string name="theme_bmw">BMW M</string>
     <string name="dynamic_system_theme_name">Dynamic Auto</string>
     <string name="dynamic_light_theme_name">Dynamic Light</string>
     <string name="dynamic_dark_theme_name">Dynamic Dark</string>
@@ -102,4 +107,16 @@
     <string name="thank_you_for_using_paid">Thank you for using the paid version of FUTO Keyboard!</string>
     <string name="payment_text_3">Note: If you already paid for either FUTO Keyboard or FUTO Voice Input in the past, feel free to tap I already paid.</string>
     <string name="payment_processing_note">If you just paid, your payment may still be processing, you should get an email with more information.</string>
+
+    <!-- Language screens -->
+    <string name="uix_languages_title">Languages</string>
+    <string name="uix_add_language">Add language</string>
+    <string name="uix_select_language">Select language</string>
+    <string name="uix_language">Language</string>
+    <string name="uix_layout">Layout</string>
+    <string name="uix_add">Add</string>
+    <string name="uix_keyboard_layouts">Keyboard Layouts</string>
+    <string name="uix_delete_language">Delete language</string>
+    <string name="uix_revert_to_default">Revert to Default</string>
+    <string name="uix_remove">Remove</string>
 </resources>

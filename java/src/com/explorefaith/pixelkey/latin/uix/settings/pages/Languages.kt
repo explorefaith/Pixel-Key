@@ -210,7 +210,7 @@ fun LanguageSurface(
                         IconButton(onClick = onDeleteLanguage) {
                             Icon(
                                 painter = painterResource(id = R.drawable.trash),
-                                contentDescription = "Delete language",
+                                contentDescription = stringResource(R.string.uix_delete_language),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                             )
                         }
@@ -220,7 +220,7 @@ fun LanguageSurface(
                 Spacer(modifier = Modifier.height(14.dp))
 
                 Text(
-                    "Keyboard Layouts",
+                    stringResource(R.string.uix_keyboard_layouts),
                     modifier = Modifier
                         .alpha(0.75f)
                         .padding(start = 16.dp, end = 16.dp),
@@ -323,9 +323,9 @@ fun ConfirmResourceActionDialog(
             if(isCurrentlySet) {
                 TextButton(onClick = { onDelete() }) {
                     if(hasBuiltInFallback) {
-                        Text("Revert to Default")
+                        Text(stringResource(R.string.uix_revert_to_default))
                     } else {
-                        Text("Remove")
+                        Text(stringResource(R.string.uix_remove))
                     }
 
                 }
@@ -360,7 +360,7 @@ fun ConfirmDeleteLanguageDialog(
         },
         confirmButton = {
             TextButton(onClick = onDelete) {
-                Text("Remove")
+                Text(stringResource(R.string.uix_remove))
             }
         },
         dismissButton = {
@@ -439,12 +439,12 @@ fun LanguagesScreen(navController: NavHostController = rememberNavController()) 
 
     LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
         item {
-            ScreenTitle("Languages", showBack = true, navController)
+            ScreenTitle(stringResource(R.string.uix_languages_title), showBack = true, navController)
         }
 
         item {
             NavigationItem(
-                title = "Add language",
+                title = stringResource(R.string.uix_add_language),
                 style = NavigationItemStyle.Misc,
                 navigate = {
                     navController.navigate("addLanguage")

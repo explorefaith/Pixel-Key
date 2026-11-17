@@ -327,6 +327,17 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         return keyboard != null && keyboard.mId != null && keyboard.mId.isAlphabetKeyboard();
     }
 
+    // Implements {@link KeyboardState.SwitchActions}.
+    @Override
+    public boolean shouldKeepSymbolsLayoutOnSpace() {
+        final Keyboard keyboard = getKeyboard();
+        if (keyboard == null || keyboard.mId == null || keyboard.mId.mSubtype == null) {
+            return false;
+        }
+        final String layoutName = keyboard.mId.mSubtype.getKeyboardLayoutSetName();
+        return layoutName != null && layoutName.startsWith("bengali");
+    }
+
     public boolean isImeSuppressedByHardwareKeyboard(
             @Nonnull final SettingsValues settingsValues,
             @Nonnull final KeyboardSwitchState toggleState) {

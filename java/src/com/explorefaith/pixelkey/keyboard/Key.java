@@ -697,15 +697,24 @@ public class Key implements Comparable<Key> {
     }
 
     public static boolean isCutKey(final int code) {
-        return code == 'x' || code == 'X';
+        return code == 'x' || code == 'X'
+                // Bengali Probhat / Jatiyo keys at the x position (ISSUE-002)
+                || code == 0x09B6 /* শ */ || code == 0x09DD /* ঢ় */
+                || code == 0x09CB /* ো */ || code == 0x09CC /* ৌ */;
     }
 
     public static boolean isCopyKey(final int code) {
-        return code == 'c' || code == 'C';
+        return code == 'c' || code == 'C'
+                // Bengali Probhat / Jatiyo keys at the c position
+                || code == 0x099A /* চ */ || code == 0x099B /* ছ */
+                || code == 0x09C7 /* ে */ || code == 0x09C8 /* ৈ */;
     }
 
     public static boolean isPasteKey(final int code) {
-        return code == 'v' || code == 'V';
+        return code == 'v' || code == 'V'
+                // Bengali Probhat / Jatiyo keys at the v position
+                || code == 0x0986 /* আ */ || code == 0x098B /* ঋ */
+                || code == 0x09B0 /* র */;
     }
 
     public final boolean isLongPressEnabled() {

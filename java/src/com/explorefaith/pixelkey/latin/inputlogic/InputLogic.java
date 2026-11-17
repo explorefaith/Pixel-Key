@@ -104,6 +104,11 @@ public final class InputLogic {
     private long mLastKeyTime;
     public final TreeSet<Long> mCurrentlyPressedHardwareKeys = new TreeSet<>();
 
+    // Length in Java chars of the composing region text actually set by the last
+    // setComposingTextInternal call. Phonetic engines (Avro/Pinyin) put converted text in the
+    // composing region whose length differs from the raw keystroke count in mWordComposer.
+    private int mLastSetComposingTextLength;
+
     // Keeps track of most recently inserted text (multi-character key) for reverting
     private String mEnteredText;
 
@@ -664,8 +669,6 @@ public final class InputLogic {
             // If the user is in the middle of correcting a word, we should learn it before moving
             // the cursor away.
             if (!TextUtils.isEmpty(mWordBeingCorrectedByCursor)) {
-                final int timeStampInSeconds = (int)TimeUnit.MILLISECONDS.toSeconds(
-                        System.currentTimeMillis());
                 performAdditionToUserHistoryDictionary(settingsValues, mWordBeingCorrectedByCursor,
                         NgramContext.EMPTY_PREV_WORDS_INFO, -1);
             }
@@ -1378,19 +1381,20 @@ public final class InputLogic {
             inputTransaction.setRequiresUpdateSuggestions();
         } else {
             final int prevCodePoint = mConnection.getCodePointBeforeCursor();
-            if (prevCodePoint == Constants.CODE_SPACE || prevCodePoint == ' ') {
+            final boolean phoneticEngine = isAvroActive() || isPinyinActive();
+            // Phonetic engines (Avro/Pinyin) commit a converted word, so a backspace right
+            // after a space must delete only the space and leave the converted word intact
+            // (ISSUE-003). Give double-space-period and punctuation-swap undos priority.
+            if (phoneticEngine && prevCodePoint == Constants.CODE_SPACE
+                    && SpaceState.DOUBLE != inputTransaction.mSpaceState
+                    && SpaceState.SWAP_PUNCTUATION != inputTransaction.mSpaceState) {
                 mConnection.deleteTextBeforeCursor(1);
                 mLastComposedWord.deactivate();
                 mSpaceState = SpaceState.NONE;
                 inputTransaction.setRequiresUpdateSuggestions();
                 return;
             }
-            if (isAvroActive() || isPinyinActive()) {
-                mConnection.deleteTextBeforeCursor(1);
-                mLastComposedWord.deactivate();
-                inputTransaction.setRequiresUpdateSuggestions();
-                return;
-            } else if (mLastComposedWord.canRevertCommit()) {
+            if (!phoneticEngine && mLastComposedWord.canRevertCommit()) {
                 final String lastComposedWord = mLastComposedWord.mTypedWord;
                 revertCommit(inputTransaction, inputTransaction.mSettingsValues);
                 StatsUtils.onRevertAutoCorrect();
@@ -1442,6 +1446,15 @@ public final class InputLogic {
                     // Likewise
                     return;
                 }
+            }
+
+            // Phonetic engines delete exactly one character per backspace so a single
+            // key press never erases the whole converted word.
+            if (phoneticEngine) {
+                mConnection.deleteTextBeforeCursor(1);
+                mLastComposedWord.deactivate();
+                inputTransaction.setRequiresUpdateSuggestions();
+                return;
             }
 
             boolean hasUnlearnedWordBeingDeleted = false;
@@ -2698,7 +2711,6 @@ public final class InputLogic {
                     score--;
                 }
             }
-            final SuggestedWordInfo recommendedInfo = list.size() > 1 ? list.get(1) : list.get(0);
             final boolean willAutoCorrect = list.size() > 1;
             final SuggestedWords words = new SuggestedWords(list, null, list.get(0), true, willAutoCorrect, false, inputStyle, sequenceNumber);
             callback.onGetSuggestedWords(words);
@@ -2788,6 +2800,7 @@ public final class InputLogic {
             composingTextToBeSet = spannable;
         }
         mConnection.setComposingText(composingTextToBeSet, newCursorPosition);
+        mLastSetComposingTextLength = composingTextToBeSet.length();
     }
 
     /**
@@ -2816,7 +2829,7 @@ public final class InputLogic {
         if (!mConnection.isCursorPositionKnown() || mConnection.hasSelection()) {
             return -1;
         }
-        return mConnection.getExpectedSelectionStart() - mWordComposer.size();
+        return mConnection.getExpectedSelectionStart() - getComposingLength();
     }
 
     /**
@@ -2828,7 +2841,13 @@ public final class InputLogic {
     // TODO: try and see if we can get rid of this method. Ideally the users of this class should
     // never need to know this.
     public int getComposingLength() {
-        return mWordComposer.size();
+        if (!mWordComposer.isComposingWord()) {
+            return mWordComposer.size();
+        }
+        // For phonetic engines the composing region holds converted text (Bangla/Hanzi) whose
+        // length differs from the raw keystroke count; use the length actually set.
+        return (isAvroActive() || isPinyinActive())
+                ? mLastSetComposingTextLength : mWordComposer.size();
     }
 
     /**

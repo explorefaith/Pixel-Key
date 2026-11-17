@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Language screens -->
+    <string name="uix_languages_title">Idiomas</string>
+    <string name="uix_add_language">Añadir idioma</string>
+    <string name="uix_select_language">Seleccionar idioma</string>
+    <string name="uix_language">Idioma</string>
+    <string name="uix_layout">Distribución</string>
+    <string name="uix_add">Añadir</string>
+    <string name="uix_keyboard_layouts">Distribuciones de teclado</string>
+    <string name="uix_delete_language">Eliminar idioma</string>
+    <string name="uix_revert_to_default">Restablecer valores</string>
+    <string name="uix_remove">Quitar</string>
+</resources>
