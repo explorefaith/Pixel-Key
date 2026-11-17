@@ -58,8 +58,11 @@ import com.explorefaith.pixelkey.latin.uix.ActionWindow
 import com.explorefaith.pixelkey.latin.uix.DialogRequestItem
 import com.explorefaith.pixelkey.latin.uix.PersistentActionState
 import com.explorefaith.pixelkey.latin.uix.PersistentStateInitialization
+import com.explorefaith.pixelkey.latin.uix.UixActionKeyboardManager
 import com.explorefaith.pixelkey.latin.uix.SettingsKey
+import com.explorefaith.pixelkey.latin.uix.PreferenceUtils
 import com.explorefaith.pixelkey.latin.uix.getSettingBlocking
+import com.explorefaith.pixelkey.latin.settings.Settings
 import com.explorefaith.pixelkey.latin.uix.isDirectBootUnlocked
 import com.explorefaith.pixelkey.latin.uix.settings.ScrollableList
 import com.explorefaith.pixelkey.latin.uix.settings.pages.ParagraphText
@@ -149,7 +152,7 @@ fun ClipboardEntryView(modifier: Modifier, clipboardEntry: ClipboardEntry, onPas
                 }
             }
 
-            val text = (clipboardEntry.text ?: "").let {
+            val text = (clipboardEntry.text ?: "(image)").let {
                 if(it.length > 256) {
                     it.substring(0, 256) + "..."
                 } else {
@@ -182,7 +185,12 @@ fun ClipboardEntryViewPreview() {
     }
 }
 
-class ClipboardHistoryManager(val context: Context, val coroutineScope: LifecycleCoroutineScope) : PersistentActionState {
+class ClipboardHistoryManager(
+    val context: Context,
+    val coroutineScope: LifecycleCoroutineScope,
+    private val isSensitiveField: () -> Boolean = { false },
+    private val onFreshCopy: ((String) -> Unit)? = null,
+) : PersistentActionState {
     private val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
     val clipboardHistory = mutableStateListOf(ClipboardEntry(
@@ -206,6 +214,14 @@ class ClipboardHistoryManager(val context: Context, val coroutineScope: Lifecycl
             withContext(Dispatchers.Main) {
                 clipboardManager.addPrimaryClipChangedListener {
                     if(!context.getSettingBlocking(ClipboardHistoryEnabled)) return@addPrimaryClipChangedListener
+                    // Incognito mode (STEP 3 #6): no clipboard capture, no paste chip.
+                    if (PreferenceUtils.getDefaultSharedPreferences(context)
+                            .getBoolean(Settings.PREF_INCOGNITO_MODE, false)) {
+                        return@addPrimaryClipChangedListener
+                    }
+                    // Never record or surface clipboard content while a password field
+                    // is focused.
+                    if (isSensitiveField()) return@addPrimaryClipChangedListener
 
                     val clip = clipboardManager.primaryClip
 
@@ -222,11 +238,20 @@ class ClipboardHistoryManager(val context: Context, val coroutineScope: Lifecycl
                         clip?.description?.getMimeType(it)
                     }.filterNotNull()
 
-                    val isSensitive = clip?.description?.extras?.getBoolean(
-                        ClipDescription.EXTRA_IS_SENSITIVE, false) ?: false
+                    val description = clip?.description
+                    // API 33's ClipDescription.isContentSensitive() is missing from some
+                    // platform jars, so reach it reflectively at runtime.
+                    val isSensitive = (description?.extras?.getBoolean(
+                        ClipDescription.EXTRA_IS_SENSITIVE, false) ?: false)
+                            || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                                && description != null
+                                && runCatching {
+                                    ClipDescription::class.java
+                                        .getMethod("isContentSensitive")
+                                        .invoke(description) as Boolean
+                                }.getOrDefault(false))
 
-                    // TODO: Support images and other non-text media
-                    if (text != null && uri == null && !isSensitive) {
+                    if (!isSensitive && (text != null || uri != null)) {
                         val isAlreadyPinned = clipboardHistory.firstOrNull {
                             ((it.text != null && it.text == text) || (it.uri != null && it.uri == uri)) && it.pinned
                         }?.pinned ?: false
@@ -245,6 +270,12 @@ class ClipboardHistoryManager(val context: Context, val coroutineScope: Lifecycl
                         clipboardHistory.add(newEntry)
 
                         saveClipboard()
+
+                        // Surface a paste chip for fresh text copies only (under 2 minutes,
+                        // shown once per copy, auto-dismissed).
+                        if (text != null && text.isNotBlank()) {
+                            onFreshCopy?.invoke(text)
+                        }
                     }
                 }
             }
@@ -252,8 +283,9 @@ class ClipboardHistoryManager(val context: Context, val coroutineScope: Lifecycl
     }
 
     suspend fun pruneOldItems() = withContext(Dispatchers.Main) {
-        val maxDays = 3L
-        val minimumTimestamp = System.currentTimeMillis() - (maxDays * 24L * 60L * 60L * 1000L)
+        // Unpinned entries auto-delete after 1 hour; pinned entries are kept.
+        val oneHourMs = 60L * 60L * 1000L
+        val minimumTimestamp = System.currentTimeMillis() - oneHourMs
         clipboardHistory.removeAll {
             (!it.pinned) && (it.timestamp < minimumTimestamp)
         }
@@ -379,7 +411,13 @@ val ClipboardHistoryAction = Action(
     simplePressImpl = null,
     canShowKeyboard = true,
     persistentState = { manager ->
-        ClipboardHistoryManager(manager.getContext(), manager.getLifecycleScope())
+        val uixActionManager = manager as? UixActionKeyboardManager
+        ClipboardHistoryManager(
+            manager.getContext(),
+            manager.getLifecycleScope(),
+            isSensitiveField = { uixActionManager?.isCurrentFieldSensitive() ?: false },
+            onFreshCopy = { text -> uixActionManager?.uixManager?.showClipboardChip(text) },
+        )
     },
     persistentStateInitialization = PersistentStateInitialization.OnKeyboardLoad,
     windowImpl = { manager, persistent ->
