@@ -28,6 +28,13 @@ public class MultiLayoutStateTransitionTest implements KeyboardState.SwitchActio
     private int mDoubleTapTimerStarts = 0;
     private int mDoubleTapTimerCancels = 0;
     private boolean mInDoubleTapTimeout = false;
+    // Simulates a Bengali layout (ISSUE-001): pages latch until the ABC key is pressed.
+    private boolean mKeepSymbolsOnSpace = false;
+
+    @Override
+    public boolean shouldKeepSymbolsLayoutOnSpace() {
+        return mKeepSymbolsOnSpace;
+    }
 
     @Override
     public void setAlphabetKeyboard() {
@@ -192,6 +199,8 @@ public class MultiLayoutStateTransitionTest implements KeyboardState.SwitchActio
 
     @Test
     public void testSymbolPage2And3NoPrematureReversionOnSpace() {
+        // ISSUE-001: Bengali pages latch — space does NOT revert to Alphabet.
+        mKeepSymbolsOnSpace = true;
         // Page 2: numbers layout
         mState.onResetKeyboardStateToAlphabet(0, 0);
         pressAndReleaseKey(Constants.CODE_SWITCH_ALPHA_SYMBOL);
@@ -210,6 +219,16 @@ public class MultiLayoutStateTransitionTest implements KeyboardState.SwitchActio
         assertEquals(CurrentLayout.SYMBOLS_SHIFTED, mCurrentLayout); // Remains stable on Page 3!
         // Explicit return to ABC
         pressAndReleaseKey(Constants.CODE_SWITCH_ALPHA_SYMBOL);
+        assertEquals(CurrentLayout.ALPHABET, mCurrentLayout);
+
+        // Stock (non-Bengali) behavior: space returns to the alphabet from Page 2/3.
+        mKeepSymbolsOnSpace = false;
+        mState.onResetKeyboardStateToAlphabet(0, 0);
+        pressAndReleaseKey(Constants.CODE_SWITCH_ALPHA_SYMBOL);
+        pressAndReleaseKey(Constants.CODE_SHIFT); // to Page 3
+        assertEquals(CurrentLayout.SYMBOLS_SHIFTED, mCurrentLayout);
+        sendEvent('+');
+        sendEvent(Constants.CODE_SPACE);
         assertEquals(CurrentLayout.ALPHABET, mCurrentLayout);
     }
 

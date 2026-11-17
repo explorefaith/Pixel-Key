@@ -36,6 +36,14 @@ public class SymbolNavigationAdversarialTest implements KeyboardState.SwitchActi
 
     private KeyboardState mState;
     private LayoutState mCurrentLayout;
+    // These tests encode the ISSUE-001 latch contract (Bengali symbol pages stay put on
+    // space); KeyboardState consults SwitchActions.shouldKeepSymbolsLayoutOnSpace().
+    private boolean mKeepSymbolsOnSpace = true;
+
+    @Override
+    public boolean shouldKeepSymbolsLayoutOnSpace() {
+        return mKeepSymbolsOnSpace;
+    }
 
     @Override public void setAlphabetKeyboard() { mCurrentLayout = LayoutState.ALPHABET; }
     @Override public void setAlphabetManualShiftedKeyboard() { mCurrentLayout = LayoutState.ALPHABET_MANUAL_SHIFTED; }
