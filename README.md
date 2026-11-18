@@ -16,6 +16,7 @@ Typing never touches the internet. Zero cloud logging. Zero tracking. Just pure,
 ### 🌍 2. Multilingual Typing Suite
 - **Bangla**: Avro-style phonetic, Probhat and Jatiyo layouts
 - **English**: Full QWERTY with next-word prediction and autocorrect
+- **Banglish**: Daily-use romanized Bengali suggestions on the English keyboard — prefix matches, typo correction (bhalu → bhalo) and next-word bigrams (kemon → acho)
 - **Hindi**: Devanagari InScript layout
 - **Spanish**: Layout with ñ, accents and ¿¡ punctuation
 - **Chinese**: Pinyin input with a candidate bar
