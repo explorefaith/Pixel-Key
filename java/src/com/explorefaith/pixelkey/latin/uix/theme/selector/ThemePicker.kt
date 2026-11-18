@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.explorefaith.pixelkey.latin.uix.KeyBordersSetting
 import com.explorefaith.pixelkey.latin.uix.SpacebarColorSetting
+import com.explorefaith.pixelkey.latin.uix.StickerKeysSetting
+import com.explorefaith.pixelkey.latin.uix.KeyboardBgImageSetting
 import com.explorefaith.pixelkey.latin.uix.settings.SettingRadio
 import com.explorefaith.pixelkey.latin.uix.KeyHintsSetting
 import com.explorefaith.pixelkey.latin.uix.KeyboardBottomOffsetSetting
@@ -301,13 +303,26 @@ fun ThemePicker(onSelected: (ThemeOption) -> Unit) {
                 item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                     CompositionLocalProvider(LocalLayoutDirection provides originalDirection) {
                         Column(modifier = Modifier.fillMaxWidth()) {
+                            SettingToggleDataStore(
+                                title = "Sticker keys (3D raised)",
+                                subtitle = "Keys pop up like real stickers; gaps stay recessed.",
+                                setting = StickerKeysSetting
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
+                }
+
+                item(span = { GridItemSpan(maxCurrentLineSpan) }) {
+                    CompositionLocalProvider(LocalLayoutDirection provides originalDirection) {
+                        Column(modifier = Modifier.fillMaxWidth()) {
                             SettingRadio(
-                                title = "Spacebar Color",
-                                options = listOf("default", "red", "blue", "yellow", "white", "dark"),
-                                optionNames = listOf("Default", "Matte Red", "Matte Blue", "Matte Yellow", "Matte White", "Matte Dark"),
+                                title = "Keyboard Background",
+                                options = listOf("none", "bride", "elf", "night", "floral", "sunset"),
+                                optionNames = listOf("None", "Anime Bride", "Elf", "Night", "Floral", "Sunset"),
                                 setting = useDataStore(
-                                    key = SpacebarColorSetting.key,
-                                    default = SpacebarColorSetting.default
+                                    key = KeyboardBgImageSetting.key,
+                                    default = KeyboardBgImageSetting.default
                                 )
                             )
                         }

@@ -41,6 +41,11 @@ val KeyboardFontSetting = SettingsKey(stringPreferencesKey("keyboard_font"), "pi
 val KeyHintColorSetting = SettingsKey(stringPreferencesKey("key_hint_color"), "subtle")
 val SpacebarColorSetting = SettingsKey(stringPreferencesKey("spacebar_color"), "default")
 
+// Sticker look (BUG/new-feature): keys drawn raised with shadows, gaps recessed over a
+// background image so the keyboard feels like real stickers.
+val StickerKeysSetting = SettingsKey(booleanPreferencesKey("stickerKeys"), false)
+val KeyboardBgImageSetting = SettingsKey(stringPreferencesKey("keyboard_bg_image"), "none")
+
 val KeyboardHeightMultiplierSetting = SettingsKey(floatPreferencesKey("keyboardHeightMultiplier"), 1.0f)
 val KeyboardBottomOffsetSetting = SettingsKey(floatPreferencesKey("keyboardOffset"), 0.0f)
 
@@ -141,6 +146,71 @@ class BasicThemeProvider(
         }
     }
 
+    /**
+     * Sticker key visual (raised key over a recessed background): a dark shadow layer
+     * peeking out at the bottom-right, with a gradient fill (light top -> dark bottom)
+     * and a thin light outline on top of it. Pressed keys sink: the shadow inset shrinks.
+     */
+    private fun stickerKeyLayers(@ColorInt baseColor: Int, pressed: Boolean, radius: Float): Drawable {
+        val shadow = coloredRoundedRectangle(
+            ColorUtils.blendARGB(baseColor, 0xFF000000.toInt(), 0.60f), radius)
+        val lighten = if (pressed) 0.26f else 0.16f
+        val darken = if (pressed) 0.26f else 0.12f
+        val alpha = if (keyboardBgImage != "none") 0.88f else 1.0f
+        val fill = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = radius
+            orientation = GradientDrawable.Orientation.TL_BR
+            colors = intArrayOf(
+                ColorUtils.setAlphaComponent(
+                    ColorUtils.blendARGB(baseColor, 0xFFFFFFFF.toInt(), lighten),
+                    (255 * alpha).roundToInt()),
+                ColorUtils.setAlphaComponent(baseColor, (255 * alpha).roundToInt()),
+                ColorUtils.setAlphaComponent(
+                    ColorUtils.blendARGB(baseColor, 0xFF000000.toInt(), darken),
+                    (255 * alpha).roundToInt())
+            )
+            setStroke(dp(1.dp).roundToInt(),
+                ColorUtils.setAlphaComponent(0xFFFFFFFF.toInt(), if (pressed) 110 else 60))
+        }
+        return LayerDrawable(arrayOf(shadow, fill)).apply {
+            val bottomInset = if (pressed) dp(1.5.dp).roundToInt() else dp(3.dp).roundToInt()
+            setLayerInset(1,
+                dp(1.dp).roundToInt(), dp(1.dp).roundToInt(),
+                dp(2.dp).roundToInt(), bottomInset)
+        }
+    }
+
+    private fun keyVisual(baseColor: Int, radius: Float): Drawable =
+        if (stickerKeys) stickerKeyLayers(baseColor, false, radius)
+        else coloredRoundedRectangle(baseColor, radius)
+
+    /** Background image + scrim so keys read as stickers on top of the artwork. */
+    private fun buildKeyboardBackground(isPixelThemeFlag: Boolean, fallbackColor: Int): Drawable {
+        val base = if (isPixelThemeFlag) coloredRectangle(0xFF000000.toInt())
+                   else coloredRectangle(fallbackColor)
+        if (keyboardBgImage == "none") return base
+        val resId = when (keyboardBgImage) {
+            "bride" -> R.drawable.kb_bg_bride
+            "elf" -> R.drawable.kb_bg_elf
+            "night" -> R.drawable.kb_bg_night
+            "floral" -> R.drawable.kb_bg_floral
+            "sunset" -> R.drawable.kb_bg_sunset
+            else -> 0
+        }
+        if (resId == 0) return base
+        return try {
+            val image = android.graphics.drawable.BitmapDrawable(
+                context.resources, android.graphics.BitmapFactory.decodeResource(context.resources, resId)
+            ).apply { setGravity(android.view.Gravity.FILL) }
+            val scrimColor = ColorUtils.blendARGB(fallbackColor, 0xFF000000.toInt(), 0.55f)
+            LayerDrawable(arrayOf(image, coloredRectangle(scrimColor)))
+        } catch (t: Throwable) {
+            Log.e("BasicThemeProvider", "Failed to load keyboard background image", t)
+            base
+        }
+    }
+
     private fun coloredOval(@ColorInt color: Int): GradientDrawable {
         return GradientDrawable().apply {
             shape = GradientDrawable.OVAL
@@ -167,6 +237,8 @@ class BasicThemeProvider(
     val keyboardHeight: Float
     val keyboardFont: String
     val spacebarColorPref: String
+    val stickerKeys: Boolean
+    val keyboardBgImage: String
     override val keyboardTypeface: Typeface?
 
     fun hasUpdated(np: Preferences): Boolean {
@@ -177,6 +249,8 @@ class BasicThemeProvider(
                 || np.get(KeyboardHeightMultiplierSetting) != keyboardHeight
                 || np.get(KeyboardFontSetting) != keyboardFont
                 || np.get(SpacebarColorSetting) != spacebarColorPref
+                || np.get(StickerKeysSetting) != stickerKeys
+                || np.get(KeyboardBgImageSetting) != keyboardBgImage
     }
 
 
@@ -211,6 +285,8 @@ class BasicThemeProvider(
         keyboardHeight = context.getSettingBlocking(KeyboardHeightMultiplierSetting)
         keyboardFont = context.getSettingBlocking(KeyboardFontSetting)
         spacebarColorPref = context.getSettingBlocking(SpacebarColorSetting)
+        stickerKeys = context.getSettingBlocking(StickerKeysSetting)
+        keyboardBgImage = context.getSettingBlocking(KeyboardBgImageSetting)
         val customSpaceColor = when (spacebarColorPref) {
             "red" -> PixelThemeHelper.COLOR_RED
             "blue" -> PixelThemeHelper.COLOR_BLUE
@@ -339,25 +415,23 @@ class BasicThemeProvider(
             colors[R.styleable.Keyboard_Key_functionalTextColor] = onBackgroundThird
         }
 
-        keyboardBackground = if (isPixelTheme) {
-            coloredRectangle(0xFF000000.toInt())
-        } else {
-            coloredRectangle(primaryKeyboardColor)
-        }
+        keyboardBackground = buildKeyboardBackground(isPixelTheme, primaryKeyboardColor)
 
         keyBackground = StateListDrawable().apply {
             addStateWithHighlightLayerOnPressed(highlight, intArrayOf(android.R.attr.state_active),
-                coloredRoundedRectangle(enterKeyBackground, dp(128.dp)),
+                if (stickerKeys) stickerKeyLayers(enterKeyBackground, false, dp(128.dp))
+                else coloredRoundedRectangle(enterKeyBackground, dp(128.dp)),
                 cornerRadius = 128.dp
             )
 
             addStateWithHighlightLayerOnPressed(highlight, intArrayOf(android.R.attr.state_checkable, android.R.attr.state_checked),
-                coloredRoundedRectangle(colorScheme.secondaryContainer.toArgb(), dp(8.dp))
+                if (stickerKeys) stickerKeyLayers(colorScheme.secondaryContainer.toArgb(), false, dp(8.dp))
+                else coloredRoundedRectangle(colorScheme.secondaryContainer.toArgb(), dp(8.dp))
             )
 
             addStateWithHighlightLayerOnPressed(highlight, intArrayOf(android.R.attr.state_checkable),
                 if(keyBorders) {
-                    coloredRoundedRectangle(keyColor, dp(12.dp))
+                    keyVisual(keyColor, dp(12.dp))
                 } else {
                     coloredRectangle(transparent)
                 }
@@ -365,7 +439,7 @@ class BasicThemeProvider(
 
             addStateWithHighlightLayerOnPressed(highlight, intArrayOf(android.R.attr.state_first),
                 if(keyBorders) {
-                    coloredRoundedRectangle(functionalKeyColor, dp(8.dp))
+                    keyVisual(functionalKeyColor, dp(8.dp))
                 } else {
                     coloredRectangle(transparent)
                 }
@@ -373,7 +447,7 @@ class BasicThemeProvider(
 
             addStateWithHighlightLayerOnPressed(highlight, intArrayOf(android.R.attr.state_empty),
                 if(keyBorders) {
-                    coloredRoundedRectangle(keyColor, dp(12.dp))
+                    keyVisual(keyColor, dp(12.dp))
                 } else {
                     coloredRectangle(transparent)
                 }
@@ -381,7 +455,7 @@ class BasicThemeProvider(
 
             addStateWithHighlightLayerOnPressed(highlight, intArrayOf(),
                 if(keyBorders) {
-                    coloredRoundedRectangle(keyColor, dp(12.dp))
+                    keyVisual(keyColor, dp(12.dp))
                 } else {
                     coloredRectangle(transparent)
                 }
@@ -415,13 +489,13 @@ class BasicThemeProvider(
             addState(intArrayOf(android.R.attr.state_pressed),
                 LayerDrawable(
                     arrayOf(
-                        spaceDrawable,
+                        if (stickerKeys) stickerKeyLayers(effectiveSpaceColor, true, dp(spaceCornerRadius)) else spaceDrawable,
                         coloredRoundedRectangle(highlight, dp(spaceCornerRadius))
                     )
                 )
             )
             addState(intArrayOf(),
-                spaceDrawable
+                if (stickerKeys) stickerKeyLayers(effectiveSpaceColor, false, dp(spaceCornerRadius)) else spaceDrawable
             )
         }
 
