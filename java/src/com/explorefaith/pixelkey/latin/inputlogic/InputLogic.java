@@ -59,6 +59,7 @@ import com.explorefaith.pixelkey.latin.settings.SettingsValuesForSuggestion;
 import com.explorefaith.pixelkey.latin.settings.SpacingAndPunctuations;
 import com.explorefaith.pixelkey.latin.suggestions.SuggestionStripViewAccessor;
 import com.explorefaith.pixelkey.latin.utils.AsyncResultHolder;
+import com.explorefaith.pixelkey.latin.utils.BanglishDictionary;
 import com.explorefaith.pixelkey.latin.utils.GraphemeUtils;
 import com.explorefaith.pixelkey.latin.utils.InputTypeUtils;
 import com.explorefaith.pixelkey.latin.utils.RecapitalizeStatus;
@@ -110,6 +111,13 @@ public final class InputLogic {
     // setComposingTextInternal call. Phonetic engines (Avro/Pinyin) put converted text in the
     // composing region whose length differs from the raw keystroke count in mWordComposer.
     private int mLastSetComposingTextLength;
+
+    // Banglish (romanized Bengali) daily-use suggestions (STEP: extreme Banglish).
+    private BanglishDictionary mBanglishDictionary;
+    private boolean mBanglishDictionaryLoadAttempted;
+    // The last word committed through a separator that is in the Banglish wordlist; drives
+    // bigram next-word predictions until the next word commit replaces it.
+    private String mLastCommittedBanglishWord;
 
     // Keeps track of most recently inserted text (multi-character key) for reverting
     private String mEnteredText;
@@ -1293,6 +1301,15 @@ public final class InputLogic {
                 commitTyped(settingsValues,
                         StringUtils.newSingleCodePointString(codePoint));
             }
+        }
+
+        // Track Banglish commits for next-word predictions ("kemon " -> acho/achen).
+        final BanglishDictionary banglishDictionary = getBanglishDictionary();
+        if (banglishDictionary != null && wasComposingWord && !mWordComposer.isComposingWord()) {
+            final CharSequence committed = mLastComposedWord.mCommittedWord;
+            mLastCommittedBanglishWord = banglishDictionary.containsWord(committed != null
+                    ? committed.toString() : null)
+                    ? committed.toString() : null;
         }
 
         final boolean swapWeakSpace = tryStripSpaceAndReturnWhetherShouldSwapInstead(event,
@@ -2806,7 +2823,100 @@ public final class InputLogic {
                     settingsValues.mTransformerPredictionEnabled
                 ),
                 settingsValues.mAutoCorrectionEnabledPerUserSettings,
-                inputStyle, sequenceNumber, callback);
+                inputStyle, sequenceNumber,
+                new Suggest.OnGetSuggestedWordsCallback() {
+                    @Override
+                    public void onGetSuggestedWords(final SuggestedWords suggestedWords) {
+                        callback.onGetSuggestedWords(
+                                mergeBanglishSuggestions(settingsValues, suggestedWords));
+                    }
+                });
+    }
+
+    /**
+     * Banglish (romanized Bengali) daily-use suggestions, blended into the strip:
+     * - while composing on a Latin keyboard: daily words matching the typed prefix
+     *   (plus typo corrections), placed right after the typed word;
+     * - after committing a Banglish word: bigram next-word predictions.
+     */
+    private SuggestedWords mergeBanglishSuggestions(final SettingsValues settingsValues,
+            final SuggestedWords suggestedWords) {
+        final BanglishDictionary dictionary = getBanglishDictionary();
+        if (dictionary == null || suggestedWords == null || suggestedWords.isEmpty()) {
+            return suggestedWords;
+        }
+        if (suggestedWords.isPunctuationSuggestions()) {
+            return suggestedWords;
+        }
+
+        final java.util.List<String> banglishWords;
+        final boolean nextWordMode;
+        if (mWordComposer.isComposingWord()) {
+            if (!settingsValues.mInputAttributes.mShouldShowSuggestions) {
+                return suggestedWords;
+            }
+            final String typedWord = mWordComposer.getTypedWord();
+            if (typedWord == null || typedWord.length() < 2
+                    || !settingsValues.mInputAttributes.mIsGeneralTextInput) {
+                return suggestedWords;
+            }
+            banglishWords = dictionary.getSuggestions(typedWord, 3);
+            nextWordMode = false;
+        } else {
+            banglishWords = dictionary.getNextSuggestions(mLastCommittedBanglishWord, 2,
+                    mWordComposer.getTypedWord());
+            nextWordMode = true;
+        }
+        if (banglishWords.isEmpty()) {
+            return suggestedWords;
+        }
+
+        int score = SuggestedWordInfo.MAX_SCORE;
+        final java.util.List<SuggestedWordInfo> banglish = new ArrayList<>(banglishWords.size());
+        for (final String word : banglishWords) {
+            banglish.add(new SuggestedWordInfo(word, "", score,
+                    nextWordMode ? SuggestedWordInfo.KIND_PREDICTION : SuggestedWordInfo.KIND_CORRECTION,
+                    null, 0, 0));
+            score -= 10;
+        }
+
+        final ArrayList<SuggestedWordInfo> merged = new ArrayList<>(suggestedWords.size() + banglish.size());
+        merged.add(suggestedWords.getInfo(0));
+        for (final SuggestedWordInfo info : banglish) {
+            boolean duplicate = false;
+            for (int i = 1; i < suggestedWords.size(); i++) {
+                if (suggestedWords.getInfo(i).mWord.equalsIgnoreCase(info.mWord)) {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate) {
+                merged.add(info);
+            }
+        }
+        for (int i = 1; i < suggestedWords.size(); i++) {
+            merged.add(suggestedWords.getInfo(i));
+        }
+        return new SuggestedWords(merged, suggestedWords.mRawSuggestions,
+                suggestedWords.mTypedWordInfo, suggestedWords.mTypedWordValid,
+                suggestedWords.mWillAutoCorrect, suggestedWords.mIsObsoleteSuggestions,
+                suggestedWords.mInputStyle, suggestedWords.mSequenceNumber);
+    }
+
+    /** Lazily loads the Banglish wordlist; returns null if unavailable. */
+    private synchronized BanglishDictionary getBanglishDictionary() {
+        if (mBanglishDictionaryLoadAttempted) {
+            return mBanglishDictionary;
+        }
+        mBanglishDictionaryLoadAttempted = true;
+        try {
+            mBanglishDictionary = BanglishDictionary.fromResources(
+                    mLatinIMELegacy.getInputMethodService().getResources());
+        } catch (final Throwable t) {
+            Log.e(TAG, "Failed to load Banglish dictionary", t);
+            mBanglishDictionary = null;
+        }
+        return mBanglishDictionary;
     }
 
     /**
