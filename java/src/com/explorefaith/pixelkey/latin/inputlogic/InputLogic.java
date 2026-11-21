@@ -59,6 +59,7 @@ import com.explorefaith.pixelkey.latin.settings.SettingsValuesForSuggestion;
 import com.explorefaith.pixelkey.latin.settings.SpacingAndPunctuations;
 import com.explorefaith.pixelkey.latin.suggestions.SuggestionStripViewAccessor;
 import com.explorefaith.pixelkey.latin.utils.AsyncResultHolder;
+import com.explorefaith.pixelkey.latin.utils.BanglishBigDictionary;
 import com.explorefaith.pixelkey.latin.utils.BanglishDictionary;
 import com.explorefaith.pixelkey.latin.utils.GraphemeUtils;
 import com.explorefaith.pixelkey.latin.utils.InputTypeUtils;
@@ -118,6 +119,9 @@ public final class InputLogic {
     // The last word committed through a separator that is in the Banglish wordlist; drives
     // bigram next-word predictions until the next word commit replaces it.
     private String mLastCommittedBanglishWord;
+    // Million-scale Banglish completion index (loaded lazily on a background thread).
+    private volatile BanglishBigDictionary mBanglishBig;
+    private boolean mBanglishBigLoadStarted;
 
     // Keeps track of most recently inserted text (multi-character key) for reverting
     private String mEnteredText;
@@ -2861,6 +2865,18 @@ public final class InputLogic {
                 return suggestedWords;
             }
             banglishWords = dictionary.getSuggestions(typedWord, 3);
+            // Fill remaining slots from the million-scale completion index (loaded async;
+            // null until ready, then the strip refreshes automatically).
+            maybeLoadBanglishBig();
+            final BanglishBigDictionary bigDictionary = mBanglishBig;
+            if (bigDictionary != null) {
+                for (final String completion : bigDictionary.getCompletions(
+                        typedWord, 3 - banglishWords.size())) {
+                    if (!banglishWords.contains(completion)) {
+                        banglishWords.add(completion);
+                    }
+                }
+            }
             nextWordMode = false;
         } else {
             banglishWords = dictionary.getNextSuggestions(mLastCommittedBanglishWord, 2,
@@ -2917,6 +2933,29 @@ public final class InputLogic {
             mBanglishDictionary = null;
         }
         return mBanglishDictionary;
+    }
+
+    /**
+     * Starts the one-shot background load of the million-scale Banglish completion index
+     * (decompress cache + bucket index); the suggestion strip refreshes when ready.
+     */
+    private void maybeLoadBanglishBig() {
+        if (mBanglishBigLoadStarted) {
+            return;
+        }
+        mBanglishBigLoadStarted = true;
+        new Thread(() -> {
+            try {
+                final BanglishBigDictionary loaded =
+                        BanglishBigDictionary.fromCache(mLatinIMELegacy.getInputMethodService());
+                mBanglishBig = loaded;
+                if (loaded != null) {
+                    mLatinIMELegacy.mHandler.postUpdateSuggestionStrip(SuggestedWords.INPUT_STYLE_TYPING);
+                }
+            } catch (final Throwable t) {
+                Log.e(TAG, "Failed to load Banglish big index", t);
+            }
+        }, "BanglishBigLoad").start();
     }
 
     /**
