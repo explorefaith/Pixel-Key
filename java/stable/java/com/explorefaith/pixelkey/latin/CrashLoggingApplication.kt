@@ -64,6 +64,10 @@ class CrashLoggingApplication : Application() {
         } else {
             println("Skipping ACRA, as user is locked")
         }
+
+        // Always keep a local copy of the last crash so the user can share it from
+        // Settings -> Help ("Send crash report to developer"), ACRA or not.
+        com.explorefaith.pixelkey.latin.utils.CrashLogSaver.install(this)
     }
 
     companion object {

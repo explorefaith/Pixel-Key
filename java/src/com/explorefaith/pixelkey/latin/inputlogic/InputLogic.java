@@ -1282,12 +1282,17 @@ public final class InputLogic {
             }
             if (snippetExpansion != null) {
                 // The composing region holds exactly the typed word (raw or converted),
-                // so setting the composing text replaces it wholesale.
-                mConnection.setComposingText(snippetExpansion, 1);
-                mConnection.finishComposingText();
-                mWordComposer.reset();
-                mEnteredText = null;
-                mLastComposedWord.deactivate();
+                // so setting the composing text replaces it wholesale. Guarded: on any
+                // editor failure the normal separator flow continues.
+                try {
+                    mConnection.setComposingText(snippetExpansion, 1);
+                    mConnection.finishComposingText();
+                    mWordComposer.reset();
+                    mEnteredText = null;
+                    mLastComposedWord.deactivate();
+                } catch (final Throwable t) {
+                    Log.e(TAG, "Snippet expansion failed; continuing with plain separator", t);
+                }
             } else if (isAvroActive() || isPinyinActive()) {
                 final String typedWord = mWordComposer.getTypedWord();
                 final String bangla = phoneticConvert(typedWord);
@@ -1308,12 +1313,18 @@ public final class InputLogic {
         }
 
         // Track Banglish commits for next-word predictions ("kemon " -> acho/achen).
-        final BanglishDictionary banglishDictionary = getBanglishDictionary();
-        if (banglishDictionary != null && wasComposingWord && !mWordComposer.isComposingWord()) {
-            final CharSequence committed = mLastComposedWord.mCommittedWord;
-            mLastCommittedBanglishWord = banglishDictionary.containsWord(committed != null
-                    ? committed.toString() : null)
-                    ? committed.toString() : null;
+        // Guarded: tracking must never break the separator flow.
+        try {
+            final BanglishDictionary banglishDictionary = getBanglishDictionary();
+            if (banglishDictionary != null && wasComposingWord && !mWordComposer.isComposingWord()) {
+                final CharSequence committed = mLastComposedWord.mCommittedWord;
+                mLastCommittedBanglishWord = banglishDictionary.containsWord(committed != null
+                        ? committed.toString() : null)
+                        ? committed.toString() : null;
+            }
+        } catch (final Throwable t) {
+            Log.e(TAG, "Banglish commit tracking failed", t);
+            mLastCommittedBanglishWord = null;
         }
 
         final boolean swapWeakSpace = tryStripSpaceAndReturnWhetherShouldSwapInstead(event,
@@ -2844,6 +2855,18 @@ public final class InputLogic {
      * - after committing a Banglish word: bigram next-word predictions.
      */
     private SuggestedWords mergeBanglishSuggestions(final SettingsValues settingsValues,
+            final SuggestedWords suggestedWords) {
+        // Banglish blending must NEVER take typing down: any failure falls back to the
+        // plain suggestions.
+        try {
+            return mergeBanglishSuggestionsInternal(settingsValues, suggestedWords);
+        } catch (final Throwable t) {
+            Log.e(TAG, "Banglish suggestion merge failed; using plain suggestions", t);
+            return suggestedWords;
+        }
+    }
+
+    private SuggestedWords mergeBanglishSuggestionsInternal(final SettingsValues settingsValues,
             final SuggestedWords suggestedWords) {
         final BanglishDictionary dictionary = getBanglishDictionary();
         if (dictionary == null || suggestedWords == null || suggestedWords.isEmpty()) {

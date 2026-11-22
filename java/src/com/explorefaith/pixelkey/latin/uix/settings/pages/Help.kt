@@ -15,6 +15,7 @@ import com.explorefaith.pixelkey.latin.BuildConfig
 import com.explorefaith.pixelkey.latin.uix.getSetting
 import com.explorefaith.pixelkey.latin.uix.setSetting
 import com.explorefaith.pixelkey.latin.uix.settings.DeveloperInfo
+import com.explorefaith.pixelkey.latin.utils.CrashLogSaver
 import com.explorefaith.pixelkey.latin.uix.settings.NavigationItem
 import com.explorefaith.pixelkey.latin.uix.settings.NavigationItemStyle
 import com.explorefaith.pixelkey.latin.uix.settings.ScreenTitle
@@ -79,6 +80,25 @@ fun HelpScreen(navController: NavHostController = rememberNavController()) {
                         "PixelKey bug report / feedback\n\nApp Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\nDevice: ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL} (Android ${android.os.Build.VERSION.RELEASE})\n\n"
                     )
                 )
+            }
+        )
+
+        NavigationItem(
+            title = "Send crash report to developer",
+            subtitle = "If the keyboard crashed, send the saved log via WhatsApp",
+            style = NavigationItemStyle.Misc,
+            navigate = {
+                val crash = CrashLogSaver.lastCrashText(context)
+                if (crash == null) {
+                    Toast.makeText(context, "No crash has been recorded", Toast.LENGTH_SHORT).show()
+                } else {
+                    DeveloperInfo.openUrl(
+                        context,
+                        "${DeveloperInfo.WHATSAPP_URL}?text=" + android.net.Uri.encode(
+                            "PixelKey CRASH REPORT\nApp Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\nDevice: ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL} (Android ${android.os.Build.VERSION.RELEASE})\n\n$crash"
+                        )
+                    )
+                }
             }
         )
     }

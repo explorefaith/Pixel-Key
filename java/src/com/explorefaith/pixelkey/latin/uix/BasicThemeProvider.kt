@@ -152,32 +152,38 @@ class BasicThemeProvider(
      * and a thin light outline on top of it. Pressed keys sink: the shadow inset shrinks.
      */
     private fun stickerKeyLayers(@ColorInt baseColor: Int, pressed: Boolean, radius: Float): Drawable {
-        val shadow = coloredRoundedRectangle(
-            ColorUtils.blendARGB(baseColor, 0xFF000000.toInt(), 0.60f), radius)
-        val lighten = if (pressed) 0.26f else 0.16f
-        val darken = if (pressed) 0.26f else 0.12f
-        val alpha = if (keyboardBgImage != "none") 0.88f else 1.0f
-        val fill = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            cornerRadius = radius
-            orientation = GradientDrawable.Orientation.TL_BR
-            colors = intArrayOf(
-                ColorUtils.setAlphaComponent(
-                    ColorUtils.blendARGB(baseColor, 0xFFFFFFFF.toInt(), lighten),
-                    (255 * alpha).roundToInt()),
-                ColorUtils.setAlphaComponent(baseColor, (255 * alpha).roundToInt()),
-                ColorUtils.setAlphaComponent(
-                    ColorUtils.blendARGB(baseColor, 0xFF000000.toInt(), darken),
-                    (255 * alpha).roundToInt())
-            )
-            setStroke(dp(1.dp).roundToInt(),
-                ColorUtils.setAlphaComponent(0xFFFFFFFF.toInt(), if (pressed) 110 else 60))
-        }
-        return LayerDrawable(arrayOf(shadow, fill)).apply {
-            val bottomInset = if (pressed) dp(1.5.dp).roundToInt() else dp(3.dp).roundToInt()
-            setLayerInset(1,
-                dp(1.dp).roundToInt(), dp(1.dp).roundToInt(),
-                dp(2.dp).roundToInt(), bottomInset)
+        return try {
+            val shadow = coloredRoundedRectangle(
+                ColorUtils.blendARGB(baseColor, 0xFF000000.toInt(), 0.60f), radius)
+            val lighten = if (pressed) 0.26f else 0.16f
+            val darken = if (pressed) 0.26f else 0.12f
+            val alpha = if (keyboardBgImage != "none") 0.88f else 1.0f
+            val fill = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
+                cornerRadius = radius
+                orientation = GradientDrawable.Orientation.TL_BR
+                colors = intArrayOf(
+                    ColorUtils.setAlphaComponent(
+                        ColorUtils.blendARGB(baseColor, 0xFFFFFFFF.toInt(), lighten),
+                        (255 * alpha).roundToInt()),
+                    ColorUtils.setAlphaComponent(baseColor, (255 * alpha).roundToInt()),
+                    ColorUtils.setAlphaComponent(
+                        ColorUtils.blendARGB(baseColor, 0xFF000000.toInt(), darken),
+                        (255 * alpha).roundToInt())
+                )
+                setStroke(dp(1.dp).roundToInt(),
+                    ColorUtils.setAlphaComponent(0xFFFFFFFF.toInt(), if (pressed) 110 else 60))
+            }
+            LayerDrawable(arrayOf(shadow, fill)).apply {
+                val bottomInset = if (pressed) dp(1.5.dp).roundToInt() else dp(3.dp).roundToInt()
+                setLayerInset(1,
+                    dp(1.dp).roundToInt(), dp(1.dp).roundToInt(),
+                    dp(2.dp).roundToInt(), bottomInset)
+            }
+        } catch (t: Throwable) {
+            // The keyboard must never fail to draw: fall back to a plain key fill.
+            Log.e("BasicThemeProvider", "Sticker key drawable failed; using plain fill", t)
+            coloredRoundedRectangle(baseColor, radius)
         }
     }
 
